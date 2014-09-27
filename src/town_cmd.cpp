@@ -3337,6 +3337,15 @@ CommandCost CheckforTownRating(DoCommandFlag flags, Town *t, TownRatingCheckType
 	return CommandCost();
 }
 
+void TownsDailyLoop()
+{
+   Town *t;
+   FOR_ALL_TOWNS(t) {
+       UpdateTownRating(t);
+       UpdateTownCargoes(t);
+   }
+}
+
 void TownsMonthlyLoop()
 {
 	Town *t;
@@ -3349,10 +3358,8 @@ void TownsMonthlyLoop()
 		}
 
 		UpdateTownAmounts(t);
-		UpdateTownRating(t);
 		UpdateTownGrowRate(t);
 		UpdateTownUnwanted(t);
-		UpdateTownCargoes(t);
 	}
 
 	UpdateTownCargoBitmap();

@@ -24,6 +24,7 @@
 Year      _cur_year;   ///< Current year, starting at 0
 Month     _cur_month;  ///< Current month (0..11)
 Date      _date;       ///< Current date in days (day counter)
+Hour      _hour;
 DateFract _date_fract; ///< Fractional part of the day.
 uint16 _tick_counter;  ///< Ever incrementing (and sometimes wrapping) tick counter for setting off various events
 
@@ -43,6 +44,7 @@ void SetDate(Date date, DateFract fract)
 	ConvertDateToYMD(date, &ymd);
 	_cur_year = ymd.year;
 	_cur_month = ymd.month;
+    _hour = _date_fract / 74;    
 }
 
 #define M(a, b) ((a << 5) | b)
@@ -160,7 +162,7 @@ Date ConvertYMDToDate(Year year, Month month, Day day)
 extern void EnginesDailyLoop();
 extern void DisasterDailyLoop();
 extern void IndustryDailyLoop();
-
+extern void TownsDailyLoop();
 extern void CompaniesMonthlyLoop();
 extern void EnginesMonthlyLoop();
 extern void TownsMonthlyLoop();
@@ -258,6 +260,7 @@ static void OnNewDay()
 
 	DisasterDailyLoop();
 	IndustryDailyLoop();
+    TownsDailyLoop();
 
 	SetWindowWidgetDirty(WC_STATUS_BAR, 0, 0);
 	EnginesDailyLoop();
@@ -278,6 +281,12 @@ void IncreaseDate()
 	if (_game_mode == GM_MENU) return;
 
 	_date_fract++;
+    
+    uint8 _temp_hour = _date_fract / 74;
+    if (_temp_hour > _hour || _temp_hour == 0) {
+        _hour = _temp_hour;
+        SetWindowWidgetDirty(WC_STATUS_BAR, 0, 0);
+    }
 	if (_date_fract < DAY_TICKS) return;
 	_date_fract = 0;
 

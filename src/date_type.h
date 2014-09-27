@@ -12,7 +12,7 @@
 #ifndef DATE_TYPE_H
 #define DATE_TYPE_H
 
-
+typedef uint8 Hour;
 typedef int32  Date;      ///< The type to store our dates in
 typedef uint16 DateFract; ///< The fraction of a date we're in, i.e. the number of ticks since the last date changeover
 typedef int32  Ticks;     ///< The type to store ticks in
@@ -27,7 +27,7 @@ typedef uint8  Day;   ///< Type for the day of the month, note: 1 based, first d
  * 1 tick is approximately 30 ms.
  * 1 day is thus about 2 seconds (74 * 30 = 2220) on a machine that can run OpenTTD normally
  */
-static const int DAY_TICKS         =  74; ///< ticks per day
+static const int DAY_TICKS         =  74*24; ///< ticks per day
 static const int DAYS_IN_YEAR      = 365; ///< days per year
 static const int DAYS_IN_LEAP_YEAR = 366; ///< sometimes, you need one day more...
 

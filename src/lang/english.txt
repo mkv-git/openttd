@@ -4875,6 +4875,7 @@ STR_BLACK_DATE_LONG                                             :{BLACK}{DATE_LO
 STR_BLACK_CROSS                                                 :{BLACK}{CROSS}
 STR_SILVER_CROSS                                                :{SILVER}{CROSS}
 STR_WHITE_DATE_LONG                                             :{WHITE}{DATE_LONG}
+STR_WHITE_DATETIME                                              :{WHITE}{DATE_ISO}  {RAW_STRING}:00
 STR_SHORT_DATE                                                  :{WHITE}{DATE_TINY}
 STR_DATE_LONG_SMALL                                             :{TINY_FONT}{BLACK}{DATE_LONG}
 STR_TINY_GROUP                                                  :{TINY_FONT}{GROUP}
