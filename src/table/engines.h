@@ -106,18 +106,18 @@ static const EngineInfo _orig_engine_info[] = {
 	MT( 23376,  20,  15,  35, CT_PASSENGERS  , T      ), //  12 'Dash' (Diesel)
 	MT( 14976,  20,  18,  28, 0              , T      ), //  13 SH/Hendry '25' (Diesel)
 	MT( 14245,  20,  20,  30, 0              , T      ), //  14 UU '37' (Diesel)
-	MT( 15341,  20,  22,  33, 0              , T      ), //  15 Floss '47' (Diesel)
+	MT( 15341,  20,  22,  70, 0              , T      ), //  15 Floss '47' (Diesel)
 	MT( 14976,  20,  20,  25, 0              ,   A|S  ), //  16 CS 4000 (Diesel)
 	MT( 16437,  20,  20,  30, 0              ,   A|S  ), //  17 CS 2400 (Diesel)
 	MT( 18993,  20,  22,  30, 0              ,   A|S  ), //  18 Centennial (Diesel)
 	MT( 13880,  20,  22,  30, 0              ,   A|S  ), //  19 Kelling 3100 (Diesel)
 	MT( 20454,  20,  22,  30, 0              ,   A|S  ), //  20 Turner Turbo (Diesel)
 	MT( 16071,  20,  22,  30, 0              ,   A|S  ), //  21 MJS 1000 (Diesel)
-	MT( 20820,  20,  20,  25, CT_MAIL        , T      ), //  22 SH '125' (Diesel)
+	MT( 20820,  20,  20,  35, CT_MAIL        , T      ), //  22 SH '125' (Diesel)
 	MT( 16437,  20,  23,  30, 0              , T      ), //  23 SH '30' (Electric)
 	MT( 19359,  20,  23,  80, 0              , T      ), //  24 SH '40' (Electric)
 	MT( 23376,  20,  25,  30, 0              , T      ), //  25 'T.I.M.' (Electric)
-	MT( 26298,  20,  25,  50, 0              , T      ), //  26 'AsiaStar' (Electric)
+	MT( 26298,  20,  25,  255, 0              , T      ), //  26 'AsiaStar' (Electric)
 	MW(  1827,  20,  20,  50, CT_PASSENGERS  , T|A|S|Y), //  27 Passenger Carriage
 	MW(  1827,  20,  20,  50, CT_MAIL        , T|A|S|Y), //  28 Mail Van
 	MW(  1827,  20,  20,  50, CT_COAL        , T|A    ), //  29 Coal Truck
@@ -297,7 +297,7 @@ static const EngineInfo _orig_engine_info[] = {
 	MR( 33023,  20,  15,  85, CT_BUBBLES     ,       Y), // 203 Wizzowow Bubble Truck
 	MS(  2922,   5,  30,  50, CT_OIL         , T|A|S  ), // 204 MPS Oil Tanker
 	MS( 17167,   5,  30,  90, CT_OIL         , T|A|S  ), // 205 CS-Inc. Oil Tanker
-	MS(  2192,   5,  30,  55, CT_PASSENGERS  , T|A|S  ), // 206 MPS Passenger Ferry
+	MS(  2192,   5,  30,  75, CT_PASSENGERS  , T|A|S  ), // 206 MPS Passenger Ferry
 	MS( 18628,   5,  30,  90, CT_PASSENGERS  , T|A|S  ), // 207 FFP Passenger Ferry
 	MS( 17257,  10,  25,  90, CT_PASSENGERS  , T|A|S  ), // 208 Bakewell 300 Hovercraft
 	MS(  9587,   5,  30,  40, CT_PASSENGERS  ,       Y), // 209 Chugger-Chug Passenger Ferry
@@ -309,7 +309,7 @@ static const EngineInfo _orig_engine_info[] = {
 	MA(  2922,  20,  20,  20,                  T|A|S  ), // 215 Sampson U52
 	MA(  9922,  20,  24,  20,                  T|A|S  ), // 216 Coleman Count
 	MA( 12659,  20,  18,  20,                  T|A|S  ), // 217 FFP Dart
-	MA( 17652,  20,  25,  35,                  T|A|S  ), // 218 Yate Haugan
+	MA( 17652,  20,  25,  45,                  T|A|S  ), // 218 Yate Haugan
 	MA(  4929,  20,  30,  30,                  T|A|S  ), // 219 Bakewell Cotswald LB-3
 	MA( 13695,  20,  23,  25,                  T|A|S  ), // 220 Bakewell Luckett LB-8
 	MA( 16341,  20,  26,  30,                  T|A|S  ), // 221 Bakewell Luckett LB-9
@@ -319,7 +319,7 @@ static const EngineInfo _orig_engine_info[] = {
 	MA( 15371,  20,  22,  25,                  T|A|S  ), // 225 Yate Aerospace YAC 1-11
 	MA( 15461,  20,  25,  25,                  T|A|S  ), // 226 Darwin 100
 	MA( 16952,  20,  22,  25,                  T|A|S  ), // 227 Darwin 200
-	MA( 17227,  20,  25,  30,                  T|A|S  ), // 228 Darwin 300
+	MA( 17227,  20,  25,  70,                  T|A|S  ), // 228 Darwin 300
 	MA( 22371,  20,  25,  35,                  T|A|S  ), // 229 Darwin 400
 	MA( 22341,  20,  25,  30,                  T|A|S  ), // 230 Darwin 500
 	MA( 27209,  20,  25,  30,                  T|A|S  ), // 231 Darwin 600
@@ -327,9 +327,9 @@ static const EngineInfo _orig_engine_info[] = {
 	MA( 18993,  20,  24,  35,                  T|A|S  ), // 233 Airtaxi A21
 	MA( 22401,  20,  24,  30,                  T|A|S  ), // 234 Airtaxi A31
 	MA( 24472,  20,  24,  30,                  T|A|S  ), // 235 Airtaxi A32
-	MA( 26724,  20,  24,  30,                  T|A|S  ), // 236 Airtaxi A33
+	MA( 26724,  20,  24,  255,                  T|A|S  ), // 236 Airtaxi A33
 	MA( 22005,  20,  25,  30,                  T|A|S  ), // 237 Yate Aerospace YAe46
-	MA( 24107,  20,  20,  35,                  T|A|S  ), // 238 Dinger 100
+	MA( 24107,  20,  20,  255,                  T|A|S  ), // 238 Dinger 100
 	MA( 29310,  20,  25,  60,                  T|A|S  ), // 239 AirTaxi A34-1000
 	MA( 35520,  20,  22,  30,                  T|A|S  ), // 240 Yate Z-Shuttle
 	MA( 36981,  20,  22,  30,                  T|A|S  ), // 241 Kelling K1
@@ -560,9 +560,9 @@ static const ShipVehicleInfo _orig_ship_vehicle_info[] = {
 	 *   |    |    |    |    |  |                  | */
 	SVI( 1, 160,  48, 220, 140, SND_06_SHIP_HORN,  0 ), //  0 MPS Oil Tanker
 	SVI( 1, 176,  80, 350, 125, SND_06_SHIP_HORN,  0 ), //  1 CS-Inc. Oil Tanker
-	SVI( 2,  96,  64, 100,  90, SND_07_FERRY_HORN, 0 ), //  2 MPS Passenger Ferry
-	SVI( 2, 112, 128, 130,  80, SND_07_FERRY_HORN, 0 ), //  3 FFP Passenger Ferry
-	SVI( 3, 148, 224, 100, 190, SND_07_FERRY_HORN, 0 ), //  4 Bakewell 300 Hovercraft
+	SVI( 2,  16,  64, 100,  50, SND_07_FERRY_HORN, 0 ), //  2 MPS Passenger Ferry
+	SVI( 2, 50, 128, 130,  95, SND_07_FERRY_HORN, 0 ), //  3 FFP Passenger Ferry
+	SVI( 3, 70, 224, 100, 125, SND_07_FERRY_HORN, 0 ), //  4 Bakewell 300 Hovercraft
 	SVI( 2,  96,  64, 100,  90, SND_07_FERRY_HORN, 0 ), //  5 Chugger-Chug Passenger Ferry
 	SVI( 2, 112, 128, 130,  80, SND_07_FERRY_HORN, 0 ), //  6 Shivershake Passenger Ferry
 	SVI( 0, 128,  48, 160, 150, SND_06_SHIP_HORN,  1 ), //  7 Yate Cargo ship
