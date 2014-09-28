@@ -14,6 +14,7 @@
 
 #include "water_map.h"
 #include "economy_func.h"
+#include "date_type.h"
 
 /**
  * Describes the behaviour of a tile during flooding.
@@ -50,7 +51,7 @@ bool IsWateredTile(TileIndex tile, Direction from);
  */
 static inline Money CanalMaintenanceCost(uint32 num)
 {
-	return (_price[PR_INFRASTRUCTURE_WATER] * num * (1 + IntSqrt(num))) >> 6; // 6 bits scaling.
+	return (_price[PR_INFRASTRUCTURE_WATER] * HOUR_MULTIPLIER * num * (1 + IntSqrt(num))) >> 6; // 6 bits scaling.
 }
 
 #endif /* WATER_H */

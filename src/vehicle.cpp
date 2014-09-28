@@ -121,11 +121,16 @@ bool Vehicle::NeedsServicing() const
 	 * vehicles to go for service is lame. */
 	if (this->vehstatus & (VS_STOPPED | VS_CRASHED)) return false;
 
+       Date interval = this->service_interval;
+
+       interval /= HOUR_MULTIPLIER;
+       if (interval == 0) interval = 1;
+
 	/* Are we ready for the next service cycle? */
 	const Company *c = Company::Get(this->owner);
 	if (this->ServiceIntervalIsPercent() ?
-			(this->reliability >= this->GetEngine()->reliability * (100 - this->GetServiceInterval()) / 100) :
-			(this->date_of_last_service + this->GetServiceInterval() >= _date)) {
+           (this->reliability >= Engine::Get(this->engine_type)->reliability * (100 - interval) / 100) :
+           (this->date_of_last_service + interval >= _date)) {
 		return false;
 	}
 

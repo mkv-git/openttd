@@ -802,6 +802,8 @@ static void CompaniesPayInterest()
 	const Company *c;
 
 	Backup<CompanyByte> cur_company(_current_company, FILE_LINE);
+    CommandCost cost;
+
 	FOR_ALL_COMPANIES(c) {
 		cur_company.Change(c->index);
 
@@ -825,7 +827,9 @@ static void CompaniesPayInterest()
 
 		SubtractMoneyFromCompany(CommandCost(EXPENSES_LOAN_INT, up_to_this_month - up_to_previous_month));
 
-		SubtractMoneyFromCompany(CommandCost(EXPENSES_OTHER, _price[PR_STATION_VALUE] >> 2));
+		//SubtractMoneyFromCompany(
+        cost = CommandCost(EXPENSES_OTHER, _price[PR_STATION_VALUE] >> 2);
+        cost.AffectCost();
 	}
 	cur_company.Restore();
 }

@@ -12,6 +12,7 @@
 #ifndef COMMAND_TYPE_H
 #define COMMAND_TYPE_H
 
+#include "date_type.h"
 #include "economy_type.h"
 #include "strings_type.h"
 #include "tile_type.h"
@@ -56,6 +57,11 @@ public:
 	 */
 	CommandCost(ExpensesType ex_t, const Money &cst) : expense_type(ex_t), cost(cst), message(INVALID_STRING_ID), success(true), textref_stack_grffile(NULL), textref_stack_size(0) {}
 
+    CommandCost AffectCost()
+    {
+        this->cost *= HOUR_MULTIPLIER;
+        return *this;
+    }
 
 	/**
 	 * Adds the given cost to the cost of the command.

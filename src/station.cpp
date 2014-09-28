@@ -15,6 +15,7 @@
 #include "roadveh.h"
 #include "viewport_func.h"
 #include "date_func.h"
+#include "date_type.h"
 #include "command_func.h"
 #include "news_func.h"
 #include "aircraft.h"
@@ -563,7 +564,7 @@ Money AirportMaintenanceCost(Owner owner)
 	const Station *st;
 	FOR_ALL_STATIONS(st) {
 		if (st->owner == owner && (st->facilities & FACIL_AIRPORT)) {
-			total_cost += _price[PR_INFRASTRUCTURE_AIRPORT] * st->airport.GetSpec()->maintenance_cost;
+			total_cost += _price[PR_INFRASTRUCTURE_AIRPORT] * HOUR_MULTIPLIER * st->airport.GetSpec()->maintenance_cost;
 		}
 	}
 	/* 3 bits fraction for the maintenance cost factor. */

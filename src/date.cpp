@@ -44,7 +44,7 @@ void SetDate(Date date, DateFract fract)
 	ConvertDateToYMD(date, &ymd);
 	_cur_year = ymd.year;
 	_cur_month = ymd.month;
-    _hour = _date_fract / 74;    
+    _hour = _date_fract / HOUR_TICKS;    
 }
 
 #define M(a, b) ((a << 5) | b)
@@ -282,7 +282,7 @@ void IncreaseDate()
 
 	_date_fract++;
     
-    uint8 _temp_hour = _date_fract / 74;
+    uint8 _temp_hour = _date_fract / HOUR_TICKS;
     if (_temp_hour > _hour || _temp_hour == 0) {
         _hour = _temp_hour;
         SetWindowWidgetDirty(WC_STATUS_BAR, 0, 0);

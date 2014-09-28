@@ -222,10 +222,12 @@ static void SubtractMoneyFromAnyCompany(Company *c, CommandCost cost)
 	                  1 << EXPENSES_ROADVEH_RUN  |
 	                  1 << EXPENSES_AIRCRAFT_RUN |
 	                  1 << EXPENSES_SHIP_RUN     |
-	                  1 << EXPENSES_PROPERTY     |
-	                  1 << EXPENSES_LOAN_INT, cost.GetExpensesType())) {
+	                  1 << EXPENSES_PROPERTY, cost.GetExpensesType())) { 
 		c->cur_economy.expenses -= cost.GetCost();
-	}
+	} else if (HasBit(1 << EXPENSES_LOAN_INT, cost.GetExpensesType())) {
+        cost.AffectCost();
+		c->cur_economy.expenses -= cost.GetCost();
+    }
 
 	InvalidateCompanyWindows(c);
 }
