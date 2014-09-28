@@ -10,6 +10,7 @@
 /** @file town_cmd.cpp Handling of town tiles. */
 
 #include "stdafx.h"
+#include <algorithm>
 #include "road_internal.h" /* Cleaning up road bits */
 #include "road_cmd.h"
 #include "landscape.h"
@@ -3124,6 +3125,13 @@ static void UpdateTownGrowRate(Town *t)
 	if (t->larger_town) m /= 2;
 
 	t->growth_rate = m / (t->cache.num_houses / 50 + 1);
+    int cur_growth = t->growth_rate;
+    if (t->cache.population > 50000) {
+        t->growth_rate = std::max(cur_growth, 51);
+    } else if (t->cache.population > 10000) {
+        int new_growth_rate = t->cache.population / 1000 + 1;
+        t->growth_rate = std::max(cur_growth, new_growth_rate);
+    }
 	if (m <= t->grow_counter) {
 		t->grow_counter = m;
 	}
