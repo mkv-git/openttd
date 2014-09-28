@@ -123,7 +123,7 @@ bool Vehicle::NeedsServicing() const
 
        Date interval = this->service_interval;
 
-       interval /= HOUR_MULTIPLIER;
+       interval /= COST_MULTIPLIER;
        if (interval == 0) interval = 1;
 
 	/* Are we ready for the next service cycle? */

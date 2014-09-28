@@ -173,7 +173,7 @@ static inline RoadBits AxisToRoadBits(Axis a)
 static inline Money RoadMaintenanceCost(RoadType roadtype, uint32 num)
 {
 	assert(IsValidRoadType(roadtype));
-	return (_price[PR_INFRASTRUCTURE_ROAD] * HOUR_MULTIPLIER * (roadtype == ROADTYPE_TRAM ? 3 : 2) * num * (1 + IntSqrt(num))) >> 9; // 2 bits fraction for the multiplier and 7 bits scaling.
+	return (_price[PR_INFRASTRUCTURE_ROAD] * COST_MULTIPLIER * (roadtype == ROADTYPE_TRAM ? 3 : 2) * num * (1 + IntSqrt(num))) >> 9; // 2 bits fraction for the multiplier and 7 bits scaling.
 }
 
 bool HasRoadTypesAvail(const CompanyID company, const RoadTypes rts);

@@ -27,19 +27,19 @@ typedef uint8  Day;   ///< Type for the day of the month, note: 1 based, first d
  * 1 tick is approximately 30 ms.
  * 1 day is thus about 2 seconds (74 * 30 = 2220) on a machine that can run OpenTTD normally
  */
-static const int HOUR_TICK_DIV     = 2;
-static const int HOUR_MULTIPLIER   = 24 / HOUR_TICK_DIV;
+static const int HOUR_TICK_DIV     = 3;
+static const int COST_MULTIPLIER   = 24 / HOUR_TICK_DIV;
 static const int HOUR_TICKS        = 74 / HOUR_TICK_DIV; /// ticks per hour
 static const int DAY_TICKS         = HOUR_TICKS * 24; ///< hours per day
 static const int DAYS_IN_YEAR      = 365; ///< days per year
 static const int DAYS_IN_LEAP_YEAR = 366; ///< sometimes, you need one day more...
 
-static const int STATION_RATING_TICKS     = 185 * HOUR_MULTIPLIER; ///< cycle duration for updating station rating
-static const int STATION_ACCEPTANCE_TICKS = 250 * HOUR_MULTIPLIER; ///< cycle duration for updating station acceptance
-static const int STATION_LINKGRAPH_TICKS  = 504 * HOUR_MULTIPLIER; ///< cycle duration for cleaning dead links
-static const int CARGO_AGING_TICKS        = 185 * HOUR_MULTIPLIER; ///< cycle duration for aging cargo
-static const int INDUSTRY_PRODUCE_TICKS   = 256 * HOUR_MULTIPLIER; ///< cycle duration for industry production
-static const int TOWN_GROWTH_TICKS        = 70 * HOUR_MULTIPLIER;  ///< cycle duration for towns trying to grow. (this originates from the size of the town array in TTD
+static const int STATION_RATING_TICKS     = 185 * COST_MULTIPLIER; ///< cycle duration for updating station rating
+static const int STATION_ACCEPTANCE_TICKS = 250 * COST_MULTIPLIER; ///< cycle duration for updating station acceptance
+static const int STATION_LINKGRAPH_TICKS  = 504 * COST_MULTIPLIER; ///< cycle duration for cleaning dead links
+static const int CARGO_AGING_TICKS        = 185 * COST_MULTIPLIER; ///< cycle duration for aging cargo
+static const int INDUSTRY_PRODUCE_TICKS   = 256 * COST_MULTIPLIER; ///< cycle duration for industry production
+static const int TOWN_GROWTH_TICKS        = 70 * COST_MULTIPLIER;  ///< cycle duration for towns trying to grow. (this originates from the size of the town array in TTD
 static const int INDUSTRY_CUT_TREE_TICKS  = INDUSTRY_PRODUCE_TICKS * 2; ///< cycle duration for lumber mill's extra action
 
 

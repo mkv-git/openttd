@@ -313,7 +313,7 @@ Money Engine::GetRunningCost() const
 		default: NOT_REACHED();
 	}
 
-	return GetPrice(base_price, cost_factor, this->GetGRF(), -8) * HOUR_MULTIPLIER;
+	return GetPrice(base_price, cost_factor, this->GetGRF(), -8) * COST_MULTIPLIER;
 }
 
 /**

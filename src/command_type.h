@@ -59,7 +59,7 @@ public:
 
     CommandCost AffectCost()
     {
-        this->cost *= HOUR_MULTIPLIER;
+        this->cost *= COST_MULTIPLIER;
         return *this;
     }
 

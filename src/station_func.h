@@ -60,7 +60,7 @@ void RerouteCargo(Station *st, CargoID c, StationID avoid, StationID avoid2);
  */
 static inline Money StationMaintenanceCost(uint32 num)
 {
-	return (_price[PR_INFRASTRUCTURE_STATION] * HOUR_MULTIPLIER * num * (1 + IntSqrt(num))) >> 7; // 7 bits scaling.
+	return (_price[PR_INFRASTRUCTURE_STATION] * COST_MULTIPLIER * num * (1 + IntSqrt(num))) >> 7; // 7 bits scaling.
 }
 
 Money AirportMaintenanceCost(Owner owner);

@@ -28,7 +28,7 @@
 static const CurrencySpec origin_currency_specs[CURRENCY_END] = {
 	{    1, "", CF_NOEURO, "\xC2\xA3",     "",               0, STR_GAME_OPTIONS_CURRENCY_GBP    }, ///< british pound
 	{    2, "", CF_NOEURO, "$",            "",               0, STR_GAME_OPTIONS_CURRENCY_USD    }, ///< american dollar
-	{    2, "", CF_ISEURO, "\xE2\x82\xAC", "",               0, STR_GAME_OPTIONS_CURRENCY_EUR    }, ///< euro
+	{    1, "", CF_ISEURO, "\xE2\x82\xAC", "",               0, STR_GAME_OPTIONS_CURRENCY_EUR    }, ///< euro
 	{  220, "", CF_NOEURO, "\xC2\xA5",     "",               0, STR_GAME_OPTIONS_CURRENCY_JPY    }, ///< japanese yen
 	{   27, "", 2002,      "",             NBSP "S.",        1, STR_GAME_OPTIONS_CURRENCY_ATS    }, ///< austrian schilling
 	{   81, "", 2002,      "BEF" NBSP,     "",               0, STR_GAME_OPTIONS_CURRENCY_BEF    }, ///< belgian franc

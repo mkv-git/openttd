@@ -51,7 +51,7 @@ bool IsWateredTile(TileIndex tile, Direction from);
  */
 static inline Money CanalMaintenanceCost(uint32 num)
 {
-	return (_price[PR_INFRASTRUCTURE_WATER] * HOUR_MULTIPLIER * num * (1 + IntSqrt(num))) >> 6; // 6 bits scaling.
+	return (_price[PR_INFRASTRUCTURE_WATER] * COST_MULTIPLIER * num * (1 + IntSqrt(num))) >> 6; // 6 bits scaling.
 }
 
 #endif /* WATER_H */
