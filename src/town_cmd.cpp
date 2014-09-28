@@ -1569,6 +1569,17 @@ static void DoCreateTown(Town *t, TileIndex tile, uint32 townnameparts, TownSize
 	} while (--i);
 
 	t->cache.num_houses -= x;
+    if (size == TSZ_RANDOM) {
+        uint8 large_town_houses = 2 * 16 + 3;
+        uint8 medium_town_houses = 16 + 3;
+        if (x >= large_town_houses)
+            size = TSZ_LARGE;
+        else if (x >= medium_town_houses || x < large_town_houses)
+            size = TSZ_MEDIUM;
+        else
+            size = TSZ_SMALL;
+    }
+    t->town_size = size;
 	UpdateTownRadius(t);
 	UpdateTownMaxPass(t);
 	UpdateAirportsNoise();

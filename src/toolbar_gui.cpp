@@ -9,6 +9,7 @@
 
 /** @file toolbar_gui.cpp Code related to the (main) toolbar. */
 
+#include <iostream>
 #include "stdafx.h"
 #include "gui.h"
 #include "window_gui.h"
@@ -46,6 +47,7 @@
 #include "game/game.hpp"
 #include "goal_base.h"
 #include "story_base.h"
+#include "town.h"
 
 #include "widgets/toolbar_widget.h"
 
@@ -279,6 +281,7 @@ static CallBackFunction ToolbarFastForwardClick(Window *w)
  * Game Option button menu entries.
  */
 enum OptionMenuEntries {
+    OME_TOWNLOADER,
 	OME_GAMEOPTIONS,
 	OME_SETTINGS,
 	OME_SCRIPT_SETTINGS,
@@ -304,6 +307,7 @@ enum OptionMenuEntries {
 static CallBackFunction ToolbarOptionsClick(Window *w)
 {
 	DropDownList *list = new DropDownList();
+	*list->Append() = new DropDownListStringItem(STR_SETTINGS_MENU_GAME_OPTIONS,             OME_TOWNLOADER, false);
 	*list->Append() = new DropDownListStringItem(STR_SETTINGS_MENU_GAME_OPTIONS,             OME_GAMEOPTIONS, false);
 	*list->Append() = new DropDownListStringItem(STR_SETTINGS_MENU_CONFIG_SETTINGS,          OME_SETTINGS, false);
 	/* Changes to the per-AI settings don't get send from the server to the clients. Clients get
@@ -328,6 +332,16 @@ static CallBackFunction ToolbarOptionsClick(Window *w)
 	return CBF_NONE;
 }
 
+void LoadTowns()
+{
+    const Town *t;
+
+    FOR_ALL_TOWNS(t) {
+        std::cout << t->town_size << std::endl;
+    }
+}
+
+
 /**
  * Handle click on one of the entries in the Options button menu.
  *
@@ -337,6 +351,7 @@ static CallBackFunction ToolbarOptionsClick(Window *w)
 static CallBackFunction MenuClickSettings(int index)
 {
 	switch (index) {
+        case OME_TOWNLOADER:           LoadTowns(); break;
 		case OME_GAMEOPTIONS:          ShowGameOptions();                               return CBF_NONE;
 		case OME_SETTINGS:             ShowGameSettings();                              return CBF_NONE;
 		case OME_SCRIPT_SETTINGS:      ShowAIConfigWindow();                            return CBF_NONE;

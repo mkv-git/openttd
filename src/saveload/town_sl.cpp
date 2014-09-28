@@ -190,6 +190,7 @@ static const SaveLoad _town_desc[] = {
 	SLE_CONDLST(Town, psa_list,            REF_STORAGE,                161, SL_MAX_VERSION),
 
 	SLE_CONDVAR(Town, cargo_produced,       SLE_UINT32,                166, SL_MAX_VERSION),
+    SLE_CONDVAR(Town, town_size, SLE_UINT32, 190, SL_MAX_VERSION),
 
 	/* reserve extra space in savegame here. (currently 30 bytes) */
 	SLE_CONDNULL(30, 2, SL_MAX_VERSION),

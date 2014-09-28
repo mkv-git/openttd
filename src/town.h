@@ -99,6 +99,7 @@ struct Town : TownPool::PoolItem<&_town_pool> {
 
 	bool larger_town;              ///< if this is a larger town and should grow more quickly
 	TownLayoutByte layout;         ///< town specific road layout
+    TownSize town_size;
 
 	std::list<PersistentStorage *> psa_list;
 
