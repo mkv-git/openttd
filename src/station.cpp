@@ -564,9 +564,9 @@ Money AirportMaintenanceCost(Owner owner)
 	const Station *st;
 	FOR_ALL_STATIONS(st) {
 		if (st->owner == owner && (st->facilities & FACIL_AIRPORT)) {
-			total_cost += _price[PR_INFRASTRUCTURE_AIRPORT] * COST_MULTIPLIER * st->airport.GetSpec()->maintenance_cost;
+			total_cost += _price[PR_INFRASTRUCTURE_AIRPORT] * st->airport.GetSpec()->maintenance_cost;
 		}
 	}
 	/* 3 bits fraction for the maintenance cost factor. */
-	return total_cost >> 3;
+	return (total_cost >> 3) * COST_MULTIPLIER;
 }

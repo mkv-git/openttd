@@ -2026,7 +2026,7 @@ struct VehicleDetailsWindow : Window {
 				SetDParam(1, v->age / DAYS_IN_LEAP_YEAR);
 				SetDParam(0, (v->age + DAYS_IN_YEAR < v->max_age) ? STR_VEHICLE_INFO_AGE : STR_VEHICLE_INFO_AGE_RED);
 				SetDParam(2, v->max_age / DAYS_IN_LEAP_YEAR);
-				SetDParam(3, v->GetDisplayRunningCost() * COST_MULTIPLIER);
+				SetDParam(3, v->GetDisplayRunningCost());
 				DrawString(r.left + WD_FRAMERECT_LEFT, r.right - WD_FRAMERECT_RIGHT, y, STR_VEHICLE_INFO_AGE_RUNNING_COST_YR);
 				y += FONT_HEIGHT_NORMAL;
 

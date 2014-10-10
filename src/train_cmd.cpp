@@ -3889,7 +3889,7 @@ Money Train::GetRunningCost() const
 		/* Halve running cost for multiheaded parts */
 		if (v->IsMultiheaded()) cost_factor /= 2;
 
-		cost += GetPrice(e->u.rail.running_cost_class, cost_factor, e->GetGRF());
+		cost += GetPrice(e->u.rail.running_cost_class, cost_factor, e->GetGRF()) * COST_MULTIPLIER;
 	} while ((v = v->GetNextVehicle()) != NULL);
 
 	return cost;
@@ -3991,6 +3991,7 @@ void Train::OnNewDay()
 		if (this->running_ticks != 0) {
 			/* running costs */
 			CommandCost cost(EXPENSES_TRAIN_RUN, this->GetRunningCost() * this->running_ticks / (DAYS_IN_YEAR  * DAY_TICKS));
+            cost.AffectCost();
 
 			this->profit_this_year -= cost.GetCost();
 			this->running_ticks = 0;

@@ -390,7 +390,7 @@ static inline Money RailConvertCost(RailType from, RailType to)
 static inline Money RailMaintenanceCost(RailType railtype, uint32 num, uint32 total_num)
 {
 	assert(railtype < RAILTYPE_END);
-	return (_price[PR_INFRASTRUCTURE_RAIL] * COST_MULTIPLIER * GetRailTypeInfo(railtype)->maintenance_multiplier * num * (1 + IntSqrt(total_num))) >> 11; // 4 bits fraction for the multiplier and 7 bits scaling.
+	return ((_price[PR_INFRASTRUCTURE_RAIL] * GetRailTypeInfo(railtype)->maintenance_multiplier * num * (1 + IntSqrt(total_num))) >> 11) * COST_MULTIPLIER; // 4 bits fraction for the multiplier and 7 bits scaling.
 }
 
 /**
@@ -400,7 +400,7 @@ static inline Money RailMaintenanceCost(RailType railtype, uint32 num, uint32 to
  */
 static inline Money SignalMaintenanceCost(uint32 num)
 {
-	return (_price[PR_INFRASTRUCTURE_RAIL] * COST_MULTIPLIER * 15 * num * (1 + IntSqrt(num))) >> 8; // 1 bit fraction for the multiplier and 7 bits scaling.
+	return ((_price[PR_INFRASTRUCTURE_RAIL] * 15 * num * (1 + IntSqrt(num))) >> 8) * COST_MULTIPLIER; // 1 bit fraction for the multiplier and 7 bits scaling.
 }
 
 void DrawTrainDepotSprite(int x, int y, int image, RailType railtype);

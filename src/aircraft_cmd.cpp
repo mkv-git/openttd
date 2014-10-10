@@ -414,7 +414,7 @@ Money Aircraft::GetRunningCost() const
 {
 	const Engine *e = this->GetEngine();
 	uint cost_factor = GetVehicleProperty(this, PROP_AIRCRAFT_RUNNING_COST_FACTOR, e->u.air.running_cost);
-	return GetPrice(PR_RUNNING_AIRCRAFT, cost_factor, e->GetGRF());
+	return GetPrice(PR_RUNNING_AIRCRAFT, cost_factor, e->GetGRF()) * COST_MULTIPLIER;
 }
 
 void Aircraft::OnNewDay()
@@ -432,6 +432,7 @@ void Aircraft::OnNewDay()
 	if (this->running_ticks == 0) return;
 
 	CommandCost cost(EXPENSES_AIRCRAFT_RUN, this->GetRunningCost() * this->running_ticks / (DAYS_IN_YEAR * DAY_TICKS));
+    cost.AffectCost();
 
 	this->profit_this_year -= cost.GetCost();
 	this->running_ticks = 0;

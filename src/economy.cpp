@@ -653,7 +653,6 @@ static void CompaniesGenStatistics()
 			cost.AddCost(CanalMaintenanceCost(c->infrastructure.water));
 			cost.AddCost(StationMaintenanceCost(c->infrastructure.station));
 			cost.AddCost(AirportMaintenanceCost(c->index));
-
 			SubtractMoneyFromCompany(cost);
 		}
 	}
@@ -827,9 +826,9 @@ static void CompaniesPayInterest()
 
 		SubtractMoneyFromCompany(CommandCost(EXPENSES_LOAN_INT, up_to_this_month - up_to_previous_month));
 
-		//SubtractMoneyFromCompany(
         cost = CommandCost(EXPENSES_OTHER, _price[PR_STATION_VALUE] >> 2);
         cost.AffectCost();
+		SubtractMoneyFromCompany(cost);
 	}
 	cur_company.Restore();
 }

@@ -210,8 +210,6 @@ static void SubtractMoneyFromAnyCompany(Company *c, CommandCost cost)
 	if (cost.GetCost() == 0) return;
 	assert(cost.GetExpensesType() != INVALID_EXPENSES);
 
-	c->money -= cost.GetCost();
-	c->yearly_expenses[0][cost.GetExpensesType()] += cost.GetCost();
 
 	if (HasBit(1 << EXPENSES_TRAIN_INC    |
 	           1 << EXPENSES_ROADVEH_INC  |
@@ -221,13 +219,16 @@ static void SubtractMoneyFromAnyCompany(Company *c, CommandCost cost)
 	} else if (HasBit(1 << EXPENSES_TRAIN_RUN    |
 	                  1 << EXPENSES_ROADVEH_RUN  |
 	                  1 << EXPENSES_AIRCRAFT_RUN |
-	                  1 << EXPENSES_SHIP_RUN     |
-	                  1 << EXPENSES_PROPERTY, cost.GetExpensesType())) { 
+	                  1 << EXPENSES_SHIP_RUN, cost.GetExpensesType())) {
+		c->cur_economy.expenses -= cost.GetCost();
+    } else if (HasBit(1 << EXPENSES_PROPERTY, cost.GetExpensesType())) { 
 		c->cur_economy.expenses -= cost.GetCost();
 	} else if (HasBit(1 << EXPENSES_LOAN_INT, cost.GetExpensesType())) {
         cost.AffectCost();
 		c->cur_economy.expenses -= cost.GetCost();
     }
+	c->money -= cost.GetCost();
+	c->yearly_expenses[0][cost.GetExpensesType()] += cost.GetCost();
 
 	InvalidateCompanyWindows(c);
 }

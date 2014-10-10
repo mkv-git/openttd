@@ -1581,7 +1581,7 @@ Money RoadVehicle::GetRunningCost() const
 	uint cost_factor = GetVehicleProperty(this, PROP_ROADVEH_RUNNING_COST_FACTOR, e->u.road.running_cost);
 	if (cost_factor == 0) return 0;
 
-	return GetPrice(e->u.road.running_cost_class, cost_factor, e->GetGRF());
+	return GetPrice(e->u.road.running_cost_class, cost_factor, e->GetGRF()) * COST_MULTIPLIER;
 }
 
 bool RoadVehicle::Tick()
@@ -1655,6 +1655,7 @@ void RoadVehicle::OnNewDay()
 	if (this->running_ticks == 0) return;
 
 	CommandCost cost(EXPENSES_ROADVEH_RUN, this->GetRunningCost() * this->running_ticks / (DAYS_IN_YEAR * DAY_TICKS));
+    cost.AffectCost();
 
 	this->profit_this_year -= cost.GetCost();
 	this->running_ticks = 0;
