@@ -1568,10 +1568,14 @@ static void LoadUnloadVehicle(Vehicle *front)
 	bool completely_emptied = true;
 	bool anything_unloaded  = false;
 	bool anything_loaded    = false;
+                
+    uint32 load_percentage = front->current_order.partial_load_percentage;
 	uint32 full_load_amount = 0;
 	uint32 cargo_not_full   = 0;
 	uint32 cargo_full       = 0;
 	uint32 reservation_left = 0;
+    uint32 cargo_cap = 0;
+    uint32 storage_size = 0;
 
 	front->cur_speed = 0;
 
@@ -1648,7 +1652,6 @@ static void LoadUnloadVehicle(Vehicle *front)
 				/* We have finished unloading (cargo count == 0) */
 				ClrBit(v->vehicle_flags, VF_CARGO_UNLOADING);
 			}
-
 			continue;
 		}
 
@@ -1741,6 +1744,9 @@ static void LoadUnloadVehicle(Vehicle *front)
 		} else {
 			SetBit(cargo_not_full, v->cargo_type);
 		}
+
+        storage_size += v->cargo.StoredCount();
+        cargo_cap += v->cargo_cap;
 	}
 
 	if (anything_loaded || anything_unloaded) {
@@ -1783,6 +1789,10 @@ static void LoadUnloadVehicle(Vehicle *front)
 			} else if (cargo_not_full != 0) {
 				finished_loading = false;
 			}
+
+            if (load_percentage && load_percentage != 100) {
+                finished_loading = double(storage_size) / cargo_cap * 100 >= load_percentage;
+            }
 
 			/* Refresh next hop stats if we're full loading to make the links
 			 * known to the distribution algorithm and allow cargo to be sent

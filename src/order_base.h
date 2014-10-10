@@ -49,6 +49,7 @@ public:
 	uint16 wait_time;    ///< How long in ticks to wait at the destination.
 	uint16 travel_time;  ///< How long in ticks the journey to this destination should take.
 	uint16 max_speed;    ///< How fast the vehicle may go on the way to the destination.
+    uint32 partial_load_percentage;
 
 	Order() : refit_cargo(CT_NO_REFIT), max_speed(UINT16_MAX) {}
 	~Order();

@@ -245,6 +245,7 @@ public:
 	byte running_ticks;                 ///< Number of ticks this vehicle was not stopped this day
 
 	byte vehstatus;                     ///< Status
+    bool partial_updated;
 	Order current_order;                ///< The current order (+ status, like: loading)
 
 	union {

@@ -29,6 +29,7 @@
 #include "hotkeys.h"
 #include "aircraft.h"
 #include "engine_func.h"
+#include "vehicle_func.h"
 
 #include "widgets/order_widget.h"
 
@@ -276,6 +277,10 @@ void DrawOrderString(const Vehicle *v, const Order *order, int order_index, int 
 				if (v->type == VEH_TRAIN && (order->GetNonStopType() & ONSF_NO_STOP_AT_DESTINATION_STATION) == 0) {
 					SetDParam(5, order->GetStopLocation() + STR_ORDER_STOP_LOCATION_NEAR_END);
 				}
+                if (order->partial_load_percentage && order->partial_load_percentage != 100) {
+                    SetDParam(8, STR_ORDER_PARTIAL_LOAD);
+                    SetDParam(9, order->partial_load_percentage);
+                }
 			}
 			break;
 		}
@@ -1201,6 +1206,11 @@ public:
 
 				VehicleOrderID sel = this->GetOrderFromPt(pt.y);
 
+                if (_shift_pressed && _ctrl_pressed && sel < this->vehicle->GetNumOrders()) {
+                    SetPartialLoad(this->vehicle->index, sel);
+                    return;
+                }
+
 				if (_ctrl_pressed && sel < this->vehicle->GetNumOrders()) {
 					TileIndex xy = this->vehicle->GetOrder(sel)->GetLocation(this->vehicle);
 					if (xy != INVALID_TILE) ScrollMainWindowToTile(xy);
@@ -1223,7 +1233,6 @@ public:
 				} else {
 					/* Select clicked order */
 					this->selected_order = sel;
-
 					if (this->vehicle->owner == _local_company) {
 						/* Activate drag and drop */
 						SetObjectToPlaceWnd(SPR_CURSOR_MOUSE, PAL_NONE, HT_DRAG, this);

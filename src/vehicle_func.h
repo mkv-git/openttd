@@ -185,4 +185,6 @@ void GetVehicleSet(VehicleSet &set, Vehicle *v, uint8 num_vehicles);
 
 void CheckCargoCapacity(Vehicle *v);
 
+void SetPartialLoad(int index, int order_idx);
+
 #endif /* VEHICLE_FUNC_H */

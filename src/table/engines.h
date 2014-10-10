@@ -345,7 +345,7 @@ static const EngineInfo _orig_engine_info[] = {
 	MA( 21275,  20,  20,  99,                        Y), // 251 Juggerplane M1
 	MA( 23832,  20,  20,  99,                        Y), // 252 Flashbang Wizzer
 	MA( 13575,  20,  20,  40,                  T|A|S  ), // 253 Tricario Helicopter
-	MA( 28215,  20,  20,  30,                  T|A|S  ), // 254 Guru X2 Helicopter
+	MA( 28215,  20,  20,  255,                  T|A|S  ), // 254 Guru X2 Helicopter
 	MA( 13575,  20,  20,  99,                        Y), // 255 Powernaut Helicopter
 };
 #undef Y
@@ -633,8 +633,8 @@ static const AircraftVehicleInfo _orig_aircraft_vehicle_info[] = {
 	AVI( 22, 25, 140, P, SND_09_JET,                     40,  74, 12,  90 ), // 35 Flashbang X1
 	AVI( 23, 32, 220, J, SND_3D_ANOTHER_JET_OVERHEAD,    40,  74, 40, 200 ), // 36 Juggerplane M1
 	AVI( 24, 80, 255, J, SND_3B_JET_OVERHEAD,            50, 181, 30, 100 ), // 37 Flashbang Wizzer
-	AVI(  9, 15,  81, H, SND_09_JET,                     20,  25, 15,  40 ), // 38 Tricario Helicopter
-	AVI( 19, 17,  77, H, SND_09_JET,                     20,  40, 20,  55 ), // 39 Guru X2 Helicopter
+	AVI(  9, 25,  40, H, SND_09_JET,                     20,  25, 15,  40 ), // 38 Tricario Helicopter
+	AVI( 19, 27,  38, H, SND_09_JET,                     20,  40, 20,  55 ), // 39 Guru X2 Helicopter
 	AVI( 25, 15,  80, H, SND_09_JET,                     20,  25, 10,  40 ), // 40 Powernaut Helicopter
 };
 #undef J

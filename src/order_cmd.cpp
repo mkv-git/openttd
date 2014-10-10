@@ -1408,6 +1408,7 @@ CommandCost CmdModifyOrder(TileIndex tile, DoCommandFlag flags, uint32 p1, uint3
 				break;
 
 			case MOF_LOAD:
+                order->partial_load_percentage = 100;
 				order->SetLoadType((OrderLoadFlags)data);
 				if (data & OLFB_NO_LOAD) order->SetRefit(CT_NO_REFIT);
 				break;

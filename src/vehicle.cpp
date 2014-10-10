@@ -2736,3 +2736,29 @@ void GetVehicleSet(VehicleSet &set, Vehicle *v, uint8 num_vehicles)
 		}
 	}
 }
+
+void SetPartialLoad(int index, int order_idx)
+{
+    Vehicle *veh = Vehicle::GetIfValid(index);
+    if (veh == NULL)
+        return;
+
+    Order *order = veh->GetOrder(order_idx);
+    if (order->GetLoadType() == OLF_LOAD_IF_POSSIBLE || order->GetLoadType() == OLFB_NO_LOAD)
+        return;
+
+    uint32 load_percentage;
+    switch (order->partial_load_percentage) {
+        case 25: load_percentage = 50; break;
+        case 50: load_percentage = 75; break;
+        case 75: load_percentage = 100; break;
+        default: load_percentage = 25;
+    }
+    order->partial_load_percentage = load_percentage;
+            
+    Vehicle *u = veh->FirstShared();
+    for (; u != NULL; u = u->NextShared()) {        
+        if (u->GetOrder(order_idx)->partial_load_percentage)
+            InvalidateVehicleOrder(u, VIWD_MODIFY_ORDERS);
+    }
+}
