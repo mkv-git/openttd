@@ -2569,7 +2569,7 @@ void Vehicle::RemoveFromShared()
 	this->previous_shared = NULL;
 }
 
-void VehiclesYearlyLoop()
+void VehiclesYearlyLoop(int quarter = 0)
 {
 	Vehicle *v;
 	FOR_ALL_VEHICLES(v) {
@@ -2579,8 +2579,19 @@ void VehiclesYearlyLoop()
 			if (v->age >= 730 && profit < 0) {
 				if (_settings_client.gui.vehicle_income_warn && v->owner == _local_company) {
 					SetDParam(0, v->index);
-					SetDParam(1, profit);
-					AddVehicleAdviceNewsItem(STR_NEWS_VEHICLE_IS_UNPROFITABLE, v->index);
+                    if (quarter == 0) {
+					    SetDParam(1, profit);
+    					AddVehicleAdviceNewsItem(STR_NEWS_VEHICLE_IS_UNPROFITABLE, v->index);
+                    } else {       
+                        char *quarter_name;
+                        switch(quarter) {
+                            case 1: SetDParamStr(1, "first"); break;
+                            case 2: SetDParamStr(1, "second"); break;
+                            case 3: SetDParamStr(1, "third"); break;
+                        }
+					    SetDParam(2, profit);
+                        AddVehicleAdviceNewsItem(STR_NEWS_VEHICLE_IS_UNPROFITABLE_QUARTER, v->index);
+                    }
 				}
 				AI::NewEvent(v->owner, new ScriptEventVehicleUnprofitable(v->index));
 			}

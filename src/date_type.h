@@ -13,6 +13,7 @@
 #define DATE_TYPE_H
 
 typedef uint8 Hour;
+typedef uint8 Quarter;
 typedef int32  Date;      ///< The type to store our dates in
 typedef uint16 DateFract; ///< The fraction of a date we're in, i.e. the number of ticks since the last date changeover
 typedef int32  Ticks;     ///< The type to store ticks in

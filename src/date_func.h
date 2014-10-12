@@ -20,6 +20,7 @@ extern Date      _date;
 extern DateFract _date_fract;
 extern uint16 _tick_counter;
 extern Hour      _hour;
+extern Quarter   _cur_quarter;
 
 void SetDate(Date date, DateFract fract);
 void ConvertDateToYMD(Date date, YearMonthDay *ymd);

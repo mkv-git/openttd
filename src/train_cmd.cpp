@@ -3791,14 +3791,14 @@ static bool TrainLocoHandler(Train *v, bool mode)
 		++v->wait_counter;
 
 		/* Should we try reversing this tick if still stuck? */
-		bool turn_around = v->wait_counter % (_settings_game.pf.wait_for_pbs_path * DAY_TICKS) == 0 && _settings_game.pf.reverse_at_signals;
+		bool turn_around = v->wait_counter % (_settings_game.pf.wait_for_pbs_path * DAY_TICKS / COST_MULTIPLIER) == 0 && _settings_game.pf.reverse_at_signals;
 
 		if (!turn_around && v->wait_counter % _settings_game.pf.path_backoff_interval != 0 && v->force_proceed == TFP_NONE) return true;
 		if (!TryPathReserve(v)) {
 			/* Still stuck. */
 			if (turn_around) ReverseTrainDirection(v);
 
-			if (HasBit(v->flags, VRF_TRAIN_STUCK) && v->wait_counter > 2 * _settings_game.pf.wait_for_pbs_path * DAY_TICKS) {
+			if (HasBit(v->flags, VRF_TRAIN_STUCK) && v->wait_counter > 2 * _settings_game.pf.wait_for_pbs_path * DAY_TICKS / COST_MULTIPLIER) {
 				/* Show message to player. */
 				if (_settings_client.gui.lost_vehicle_warn && v->owner == _local_company) {
 					SetDParam(0, v->index);

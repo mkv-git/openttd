@@ -25,6 +25,7 @@ Year      _cur_year;   ///< Current year, starting at 0
 Month     _cur_month;  ///< Current month (0..11)
 Date      _date;       ///< Current date in days (day counter)
 Hour      _hour;
+Quarter   _cur_quarter;
 DateFract _date_fract; ///< Fractional part of the day.
 uint16 _tick_counter;  ///< Ever incrementing (and sometimes wrapping) tick counter for setting off various events
 
@@ -45,6 +46,7 @@ void SetDate(Date date, DateFract fract)
 	_cur_year = ymd.year;
 	_cur_month = ymd.month;
     _hour = _date_fract / HOUR_TICKS;    
+    _cur_quarter = _cur_month / 3;
 }
 
 #define M(a, b) ((a << 5) | b)
@@ -171,7 +173,7 @@ extern void StationMonthlyLoop();
 extern void SubsidyMonthlyLoop();
 
 extern void CompaniesYearlyLoop();
-extern void VehiclesYearlyLoop();
+extern void VehiclesYearlyLoop(int quarter = 0);
 extern void TownsYearlyLoop();
 
 extern void ShowEndGameChart();
@@ -185,6 +187,12 @@ static const Month _autosave_months[] = {
 	 6, ///< every 6 months
 	12, ///< every 12 months
 };
+
+static void OnNewQuarter()
+{
+    if (_cur_quarter < 4)
+        VehiclesYearlyLoop(_cur_quarter);
+}
 
 /**
  * Runs various procedures that have to be done yearly
@@ -302,12 +310,18 @@ void IncreaseDate()
 	/* check if we entered a new year? */
 	bool new_year = ymd.year != _cur_year;
 
+    bool new_quarter = (ymd.month / 3) != _cur_quarter;
+
 	/* update internal variables before calling the daily/monthly/yearly loops */
 	_cur_month = ymd.month;
 	_cur_year  = ymd.year;
+    _cur_quarter = ymd.month / 3;
 
 	/* yes, call various daily loops */
 	OnNewDay();
+    
+    /* yes, we also call various quarterly loops */
+    if (new_quarter) OnNewQuarter();
 
 	/* yes, call various monthly loops */
 	if (new_month) OnNewMonth();
