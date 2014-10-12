@@ -281,12 +281,12 @@ static CallBackFunction ToolbarFastForwardClick(Window *w)
  * Game Option button menu entries.
  */
 enum OptionMenuEntries {
-    OME_TOWNLOADER,
 	OME_GAMEOPTIONS,
 	OME_SETTINGS,
 	OME_SCRIPT_SETTINGS,
 	OME_NEWGRFSETTINGS,
 	OME_TRANSPARENCIES,
+    OME_ORDERS_REVIEW,
 	OME_SHOW_TOWNNAMES,
 	OME_SHOW_STATIONNAMES,
 	OME_SHOW_WAYPOINTNAMES,
@@ -307,7 +307,6 @@ enum OptionMenuEntries {
 static CallBackFunction ToolbarOptionsClick(Window *w)
 {
 	DropDownList *list = new DropDownList();
-	*list->Append() = new DropDownListStringItem(STR_SETTINGS_MENU_GAME_OPTIONS,             OME_TOWNLOADER, false);
 	*list->Append() = new DropDownListStringItem(STR_SETTINGS_MENU_GAME_OPTIONS,             OME_GAMEOPTIONS, false);
 	*list->Append() = new DropDownListStringItem(STR_SETTINGS_MENU_CONFIG_SETTINGS,          OME_SETTINGS, false);
 	/* Changes to the per-AI settings don't get send from the server to the clients. Clients get
@@ -316,6 +315,7 @@ static CallBackFunction ToolbarOptionsClick(Window *w)
 	if (!_networking || _network_server) *list->Append() = new DropDownListStringItem(STR_SETTINGS_MENU_SCRIPT_SETTINGS, OME_SCRIPT_SETTINGS, false);
 	*list->Append() = new DropDownListStringItem(STR_SETTINGS_MENU_NEWGRF_SETTINGS,          OME_NEWGRFSETTINGS, false);
 	*list->Append() = new DropDownListStringItem(STR_SETTINGS_MENU_TRANSPARENCY_OPTIONS,     OME_TRANSPARENCIES, false);
+	*list->Append() = new DropDownListStringItem(STR_ORDER_REVIEWS_MENU_TITLE, OME_ORDERS_REVIEW, false);
 	*list->Append() = new DropDownListItem(-1, false);
 	*list->Append() = new DropDownListCheckedItem(STR_SETTINGS_MENU_TOWN_NAMES_DISPLAYED,    OME_SHOW_TOWNNAMES, false, HasBit(_display_opt, DO_SHOW_TOWN_NAMES));
 	*list->Append() = new DropDownListCheckedItem(STR_SETTINGS_MENU_STATION_NAMES_DISPLAYED, OME_SHOW_STATIONNAMES, false, HasBit(_display_opt, DO_SHOW_STATION_NAMES));
@@ -351,7 +351,7 @@ void LoadTowns()
 static CallBackFunction MenuClickSettings(int index)
 {
 	switch (index) {
-        case OME_TOWNLOADER:           LoadTowns(); break;
+        case OME_ORDERS_REVIEW:           ShowOrderReviewsWindow(); return CBF_NONE;
 		case OME_GAMEOPTIONS:          ShowGameOptions();                               return CBF_NONE;
 		case OME_SETTINGS:             ShowGameSettings();                              return CBF_NONE;
 		case OME_SCRIPT_SETTINGS:      ShowAIConfigWindow();                            return CBF_NONE;

@@ -67,4 +67,7 @@ void ShowBuildIndustryWindow();
 void ShowFoundTownWindow();
 void ShowMusicWindow();
 
+/* toolbar_gui.cpp */
+void ShowOrderReviewsWindow();
+
 #endif /* GUI_H */

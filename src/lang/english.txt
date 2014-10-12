@@ -3835,6 +3835,15 @@ STR_ORDER_CONDITIONAL_TRUE_FALSE                                :Jump to order {
 
 STR_INVALID_ORDER                                               :{RED} (Invalid Order)
 
+STR_ORDER_REVIEWS_MENU_TITLE                                    :Order reviews
+STR_ORDER_REVIEWS_TITLE                                         :{WHITE}Order reviews
+
+STR_ORDERS_REVIEW_DELAY                                         :{WHITE}Remove {RAW_STRING} "delay" orders ({NUM})
+STR_ORDERS_REVIEW_FULL_LOAD                                     :{WHITE}Remove {RAW_STRING} "full load" orders ({NUM})
+STR_ORDERS_REVIEW_PARTIAL_LOAD                                  :{WHITE}Remove {RAW_STRING} "partial load" orders ({NUM})
+STR_ORDERS_REMOVE                                               :Remove
+STR_ORDERS_REMOVE_ALL                                           :Remove all
+
 # Time table window
 STR_TIMETABLE_TITLE                                             :{WHITE}{VEHICLE} (Timetable)
 STR_TIMETABLE_ORDER_VIEW                                        :{BLACK}Orders

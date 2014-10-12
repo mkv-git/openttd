@@ -1753,3 +1753,274 @@ void ShowOrdersWindow(const Vehicle *v)
 		new OrdersWindow(v->IsGroundVehicle() ? &_orders_train_desc : &_orders_desc, v);
 	}
 }
+
+
+
+struct OrdersReviewWindow : Window 
+{
+    private:
+        enum ORLoadType {
+            OR_DELAY,
+            OR_FULL_LOAD,
+            OR_PARTIAL_LOAD,
+        };
+        int vehicle_order_cnt [4][3];
+
+        void LoadVehicleOrders()
+        {
+
+            // reset counters
+            for (int i=0; i<4; i++)
+                for (int j=0; j<3; j++)
+                    vehicle_order_cnt[i][j] = 0;
+
+            const Vehicle *vehicle;
+            FOR_ALL_VEHICLES(vehicle) {
+                const Order *order;
+                FOR_VEHICLE_ORDERS(vehicle, order) {
+                    int order_type = -1;
+                    OrderLoadFlags load = order->GetLoadType();
+                    bool has_partial_load = order->partial_load_percentage && order->partial_load_percentage != 100;
+                    if ((load & OLFB_FULL_LOAD || load & OLF_FULL_LOAD_ANY) && !has_partial_load)
+                        order_type = OR_FULL_LOAD;
+                    else if ((load & OLFB_FULL_LOAD || load & OLF_FULL_LOAD_ANY) && has_partial_load)
+                        order_type = OR_PARTIAL_LOAD;
+                    if (order->wait_time)
+                        order_type = OR_DELAY;
+    
+                    if (order_type == -1)
+                        continue;
+                    if (vehicle->type > VEH_AIRCRAFT)
+                        continue;
+
+                    vehicle_order_cnt[vehicle->type][order_type]++;
+                }               
+            }
+
+        }
+
+        void RemoveVehicleOrders(VehicleType vehicle_type, ORLoadType load_type)
+        {
+            const Vehicle *vehicle;
+            FOR_ALL_VEHICLES(vehicle) {
+                if (vehicle->type != vehicle_type)
+                    continue;
+                
+                Order *order;
+                FOR_VEHICLE_ORDERS(vehicle, order) {
+                    int order_type = -1;
+                    OrderLoadFlags load = order->GetLoadType();
+
+                    bool has_partial_load = order->partial_load_percentage && order->partial_load_percentage != 100;
+                    if ((load & OLFB_FULL_LOAD || load & OLF_FULL_LOAD_ANY) && !has_partial_load)
+                        order_type = OR_FULL_LOAD;
+                    else if ((load & OLFB_FULL_LOAD || load & OLF_FULL_LOAD_ANY) && has_partial_load)
+                        order_type = OR_PARTIAL_LOAD;
+                    if (order->wait_time)
+                        order_type = OR_DELAY;
+                
+                    if (order_type != load_type)
+                        continue;                   
+            
+                    switch (load_type) {
+                        case OR_DELAY:
+                            order->wait_time = 0;
+                            break;
+                        case OR_FULL_LOAD:
+                            order->SetLoadType(OLF_LOAD_IF_POSSIBLE);
+                            break;
+                        case OR_PARTIAL_LOAD:
+                            order->partial_load_percentage = 100;
+                            order->SetLoadType(OLF_LOAD_IF_POSSIBLE);
+                            break;
+                    }
+
+                    SetWindowDirty(WC_VEHICLE_ORDERS, vehicle->index);
+                    SetWindowDirty(WC_VEHICLE_TIMETABLE, vehicle->index);
+
+                }
+            }
+        }
+
+    public:
+        OrdersReviewWindow(WindowDesc *desc, WindowNumber window_number) : Window(desc)
+        {
+            this->InitNested(window_number);
+            this->InvalidateData();
+        }
+
+    virtual void OnInit()
+    {
+        this->LoadVehicleOrders();
+    }
+
+    virtual void OnInvalidateData(int data = 0, bool gui_scope = true)
+    {
+        this->LoadVehicleOrders();
+    }
+
+    virtual void OnClick(Point pt, int widget, int click_count)
+    {
+        switch(widget) {
+            case WID_OR_AIR_DELAY:              
+                this->RemoveVehicleOrders(VEH_AIRCRAFT, OR_DELAY); 
+                break;
+            case WID_OR_AIR_FULL_LOAD:
+                this->RemoveVehicleOrders(VEH_AIRCRAFT, OR_FULL_LOAD); 
+                break;
+            case WID_OR_AIR_PARTIAL_LOAD:
+                this->RemoveVehicleOrders(VEH_AIRCRAFT, OR_PARTIAL_LOAD); 
+                break;
+            case WID_OR_ROAD_DELAY:
+                this->RemoveVehicleOrders(VEH_ROAD, OR_DELAY); 
+                break;
+            case WID_OR_ROAD_FULL_LOAD:
+                this->RemoveVehicleOrders(VEH_ROAD, OR_FULL_LOAD); 
+                break;
+            case WID_OR_ROAD_PARTIAL_LOAD:
+                this->RemoveVehicleOrders(VEH_ROAD, OR_PARTIAL_LOAD); 
+                break;
+            case WID_OR_SHIP_DELAY:
+                this->RemoveVehicleOrders(VEH_SHIP, OR_DELAY); 
+                break;
+            case WID_OR_SHIP_FULL_LOAD:
+                this->RemoveVehicleOrders(VEH_SHIP, OR_FULL_LOAD); 
+                break;
+            case WID_OR_SHIP_PARTIAL_LOAD:
+                this->RemoveVehicleOrders(VEH_SHIP, OR_PARTIAL_LOAD); 
+                break;
+            case WID_OR_TRAIN_DELAY:
+                this->RemoveVehicleOrders(VEH_TRAIN, OR_DELAY); 
+                break;
+            case WID_OR_TRAIN_FULL_LOAD:
+                this->RemoveVehicleOrders(VEH_TRAIN, OR_FULL_LOAD); 
+                break;
+            case WID_OR_TRAIN_PARTIAL_LOAD:
+                this->RemoveVehicleOrders(VEH_TRAIN, OR_PARTIAL_LOAD); 
+                break;
+        }
+        this->InvalidateData();
+    }
+
+    virtual void SetStringParameters(int widget) const
+    {
+        switch(widget) {
+            case WID_OR_AIR_DELAY:
+                SetDParamStr(0, "airplane");
+                SetDParam(1, this->vehicle_order_cnt[VEH_AIRCRAFT][OR_DELAY]);
+                break;
+            case WID_OR_AIR_FULL_LOAD:
+                SetDParamStr(0, "airplane");
+                SetDParam(1, this->vehicle_order_cnt[VEH_AIRCRAFT][OR_FULL_LOAD]);
+                break;
+            case WID_OR_AIR_PARTIAL_LOAD:
+                SetDParamStr(0, "airplane");
+                SetDParam(1, this->vehicle_order_cnt[VEH_AIRCRAFT][OR_PARTIAL_LOAD]);
+                break;
+
+            case WID_OR_ROAD_DELAY:
+                SetDParamStr(0, "road vehicle");
+                SetDParam(1, this->vehicle_order_cnt[VEH_ROAD][OR_DELAY]);
+                break;
+            case WID_OR_ROAD_FULL_LOAD:
+                SetDParamStr(0, "road vehicle");
+                SetDParam(1, this->vehicle_order_cnt[VEH_ROAD][OR_FULL_LOAD]);
+                break;
+            case WID_OR_ROAD_PARTIAL_LOAD:
+                SetDParamStr(0, "road vehicle");
+                SetDParam(1, this->vehicle_order_cnt[VEH_ROAD][OR_PARTIAL_LOAD]);
+                break;
+
+            case WID_OR_SHIP_DELAY:
+                SetDParamStr(0, "ship");
+                SetDParam(1, this->vehicle_order_cnt[VEH_SHIP][OR_DELAY]);
+                break;
+
+            case WID_OR_SHIP_FULL_LOAD:
+                SetDParamStr(0, "ship");
+                SetDParam(1, this->vehicle_order_cnt[VEH_SHIP][OR_FULL_LOAD]);
+                break;
+
+            case WID_OR_SHIP_PARTIAL_LOAD:
+                SetDParamStr(0, "ship");
+                SetDParam(1, this->vehicle_order_cnt[VEH_SHIP][OR_PARTIAL_LOAD]);
+                break;
+
+            case WID_OR_TRAIN_DELAY:
+                SetDParamStr(0, "trains");
+                SetDParam(1, this->vehicle_order_cnt[VEH_TRAIN][OR_DELAY]);
+                break;
+
+            case WID_OR_TRAIN_FULL_LOAD:
+                SetDParamStr(0, "train");
+                SetDParam(1, this->vehicle_order_cnt[VEH_TRAIN][OR_FULL_LOAD]);
+                break;
+
+            case WID_OR_TRAIN_PARTIAL_LOAD:
+                SetDParamStr(0, "train");
+                SetDParam(1, this->vehicle_order_cnt[VEH_TRAIN][OR_PARTIAL_LOAD]);
+                break;
+
+        }
+    }
+
+};
+
+static const NWidgetPart _orders_review_widgets[] = {
+	NWidget(NWID_HORIZONTAL),
+		NWidget(WWT_CLOSEBOX, COLOUR_BROWN),
+		NWidget(WWT_CAPTION, COLOUR_BROWN), 
+            SetDataTip(STR_ORDER_REVIEWS_TITLE, STR_TOOLTIP_WINDOW_TITLE_DRAG_THIS),
+		NWidget(WWT_SHADEBOX, COLOUR_BROWN),
+		NWidget(WWT_STICKYBOX, COLOUR_BROWN),
+	EndContainer(),
+    
+    NWidget(WWT_PANEL, COLOUR_BROWN), SetResize(1, 1),
+        NWidget(NWID_SPACER), SetMinimalSize(0, 2),                
+        NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_AIR_DELAY),
+                SetDataTip(STR_ORDERS_REVIEW_DELAY, STR_NULL),
+        NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_AIR_FULL_LOAD),
+                SetDataTip(STR_ORDERS_REVIEW_FULL_LOAD, STR_NULL),
+        NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_AIR_PARTIAL_LOAD),
+                SetDataTip(STR_ORDERS_REVIEW_PARTIAL_LOAD, STR_NULL),
+
+        NWidget(NWID_SPACER), SetMinimalSize(0, 5),
+        NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_ROAD_DELAY),
+                SetDataTip(STR_ORDERS_REVIEW_DELAY, STR_NULL),
+        NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_ROAD_FULL_LOAD),
+                SetDataTip(STR_ORDERS_REVIEW_FULL_LOAD, STR_NULL),
+        NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_ROAD_PARTIAL_LOAD),
+                SetDataTip(STR_ORDERS_REVIEW_PARTIAL_LOAD, STR_NULL),
+
+        NWidget(NWID_SPACER), SetMinimalSize(0, 5),
+        NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_SHIP_DELAY),
+                SetDataTip(STR_ORDERS_REVIEW_DELAY, STR_NULL),
+        NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_SHIP_FULL_LOAD),
+                SetDataTip(STR_ORDERS_REVIEW_FULL_LOAD, STR_NULL),
+        NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_SHIP_PARTIAL_LOAD),
+                SetDataTip(STR_ORDERS_REVIEW_PARTIAL_LOAD, STR_NULL),
+
+        NWidget(NWID_SPACER), SetMinimalSize(0, 5),
+        NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_TRAIN_DELAY),
+                SetDataTip(STR_ORDERS_REVIEW_DELAY, STR_NULL),
+        NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_TRAIN_FULL_LOAD),
+                SetDataTip(STR_ORDERS_REVIEW_FULL_LOAD, STR_NULL),
+        NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_TRAIN_PARTIAL_LOAD),
+            SetDataTip(STR_ORDERS_REVIEW_PARTIAL_LOAD, STR_NULL),
+
+        NWidget(NWID_SPACER), SetMinimalSize(0, 2),
+    EndContainer(), // panel
+
+};
+
+static WindowDesc _orders_review_desc(
+    WDP_AUTO, "orders_review", 260, 100,
+    WC_ORDERS_REVIEW, WC_NONE, 0,
+    _orders_review_widgets, lengthof(_orders_review_widgets)
+);
+
+
+void ShowOrderReviewsWindow()
+{
+    AllocateWindowDescFront<OrdersReviewWindow>(&_orders_review_desc, 0);
+}

@@ -675,6 +675,8 @@ enum WindowClass {
 	 */
 	WC_LINKGRAPH_LEGEND,
 
+    WC_ORDERS_REVIEW,
+
 	WC_INVALID = 0xFFFF, ///< Invalid window.
 };
 

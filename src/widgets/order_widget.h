@@ -39,6 +39,25 @@ enum OrderWidgets {
 	WID_O_SEL_TOP_ROW,               ///< #NWID_SELECTION widget for the top row of the 'your non-trains' order window.
 	WID_O_SEL_BOTTOM_MIDDLE,         ///< #NWID_SELECTION widget for the middle part of the bottom row of the 'your train' order window.
 	WID_O_SHARED_ORDER_LIST,         ///< Open list of shared vehicles.
+    WID_O_AIR_ORDERS_REVIEW,
+    WID_O_ROAD_ORDERS_REVIEW,          
+    WID_O_SHIP_ORDERS_REVIEW,
+    WID_O_TRAIN_ORDERS_REVIEW,
+};
+
+enum OrderReviewWidgets {
+    WID_OR_AIR_DELAY,
+    WID_OR_AIR_FULL_LOAD,
+    WID_OR_AIR_PARTIAL_LOAD,
+    WID_OR_ROAD_DELAY,
+    WID_OR_ROAD_FULL_LOAD,
+    WID_OR_ROAD_PARTIAL_LOAD,
+    WID_OR_SHIP_DELAY,
+    WID_OR_SHIP_FULL_LOAD,
+    WID_OR_SHIP_PARTIAL_LOAD,
+    WID_OR_TRAIN_DELAY,
+    WID_OR_TRAIN_FULL_LOAD,
+    WID_OR_TRAIN_PARTIAL_LOAD,
 };
 
 #endif /* WIDGETS_ORDER_WIDGET_H */
