@@ -701,6 +701,14 @@ CommandCost CmdAutoreplaceVehicle(TileIndex tile, DoCommandFlag flags, uint32 p1
 	bool nothing_to_do = true;
 
 	if (any_replacements) {
+        bool is_new_multihead = false;
+
+        if (v->type == VEH_TRAIN) {
+            EngineID e;
+            GetNewEngineType(v, c, false, e);
+            is_new_multihead = RailVehInfo(e)->railveh_type == RAILVEH_MULTIHEAD;
+        }
+
 		bool was_stopped = free_wagon || ((v->vehstatus & VS_STOPPED) != 0);
 
 		/* Stop the vehicle */
@@ -717,6 +725,26 @@ CommandCost CmdAutoreplaceVehicle(TileIndex tile, DoCommandFlag flags, uint32 p1
 		if (free_wagon) {
 			cost.AddCost(ReplaceFreeUnit(&v, flags & ~DC_EXEC, &nothing_to_do));
 		} else {
+            if (!is_new_multihead) {
+                if (v->type == VEH_TRAIN && Train::From(v)->IsMultiheaded()) {
+                    const Company *dc = Company::Get(_current_company);
+                    EngineID ed;
+                    GetNewEngineType(v, dc, true, ed);               
+                    CommandCost rets = DoCommand(v->tile, ed, 0, flags & ~DC_EXEC, GetCmdBuildVeh(v));
+                }
+            } else {
+                Train *w;
+                int i;
+                for (w = Train::From(v), i=0; w != NULL; w = w->GetNextUnit(), i++) {
+                    if (i == 1) {
+                        if (RailVehInfo(w->engine_type)->railveh_type != RAILVEH_WAGON) {
+                            DoCommand(0, w->index, 0, flags & ~DC_EXEC, GetCmdSellVeh(w));
+                        }
+                        break;
+                    }
+                }
+            }
+
 			cost.AddCost(ReplaceChain(&v, flags & ~DC_EXEC, wagon_removal, &nothing_to_do));
 		}
 		RestoreRandomSeeds(saved_seeds);
@@ -726,8 +754,26 @@ CommandCost CmdAutoreplaceVehicle(TileIndex tile, DoCommandFlag flags, uint32 p1
 			if (free_wagon) {
 				ret = ReplaceFreeUnit(&v, flags, &nothing_to_do);
 			} else {
+                if (!is_new_multihead) {
+                    if (v->type == VEH_TRAIN && Train::From(v)->IsMultiheaded()) {
+                        const Company *cd = Company::Get(_current_company);
+                        EngineID ed;
+                        GetNewEngineType(v, cd, true, ed);               
+                        CommandCost rets = DoCommand(v->tile, ed, 0, flags, GetCmdBuildVeh(v));                           
+                        w = Vehicle::Get(_new_vehicle_id);
+                        DoCommand(0, w->index, v->index, flags, CMD_MOVE_RAIL_VEHICLE);
+                        cost.AddCost(rets.GetCost());
+                    }
+                } else {
+                    Train *w;
+                    int i;
+                    for (w = Train::From(v), i=0; w != NULL; w = w->GetNextUnit(), i++) {
+                        if (i == 1)
+                            DoCommand(0, w->index, 0, DC_EXEC, GetCmdSellVeh(w));
+                    }
+                }
 				ret = ReplaceChain(&v, flags, wagon_removal, &nothing_to_do);
-			}
+            }
 			assert(ret.Succeeded() && ret.GetCost() == cost.GetCost());
 		}
 
