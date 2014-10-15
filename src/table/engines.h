@@ -306,45 +306,45 @@ static const EngineInfo _orig_engine_info[] = {
 	MS( 19724,   5,  30,  98, CT_GOODS       , T|A|S  ), // 212 Bakewell Cargo ship
 	MS(  9587,   5,  30,  45, CT_GOODS       ,       Y), // 213 Mightymover Cargo ship
 	MS( 22371,   5,  30,  90, CT_GOODS       ,       Y), // 214 Powernaut Cargo ship
-	MA(  2922,  20,  20,  20,                  T|A|S  ), // 215 Sampson U52
-	MA(  9922,  20,  24,  20,                  T|A|S  ), // 216 Coleman Count
-	MA( 12659,  20,  18,  20,                  T|A|S  ), // 217 FFP Dart
-	MA( 17652,  20,  25,  45,                  T|A|S  ), // 218 Yate Haugan
-	MA(  4929,  20,  30,  30,                  T|A|S  ), // 219 Bakewell Cotswald LB-3
-	MA( 13695,  20,  23,  25,                  T|A|S  ), // 220 Bakewell Luckett LB-8
-	MA( 16341,  20,  26,  30,                  T|A|S  ), // 221 Bakewell Luckett LB-9
-	MA( 21395,  20,  25,  30,                  T|A|S  ), // 222 Bakewell Luckett LB80
-	MA( 18263,  20,  20,  30,                  T|A|S  ), // 223 Bakewell Luckett LB-10
-	MA( 25233,  20,  25,  30,                  T|A|S  ), // 224 Bakewell Luckett LB-11
-	MA( 15371,  20,  22,  25,                  T|A|S  ), // 225 Yate Aerospace YAC 1-11
-	MA( 15461,  20,  25,  25,                  T|A|S  ), // 226 Darwin 100
-	MA( 16952,  20,  22,  25,                  T|A|S  ), // 227 Darwin 200
-	MA( 17227,  20,  25,  70,                  T|A|S  ), // 228 Darwin 300
-	MA( 22371,  20,  25,  35,                  T|A|S  ), // 229 Darwin 400
-	MA( 22341,  20,  25,  30,                  T|A|S  ), // 230 Darwin 500
-	MA( 27209,  20,  25,  30,                  T|A|S  ), // 231 Darwin 600
-	MA( 17988,  20,  20,  30,                  T|A|S  ), // 232 Guru Galaxy
-	MA( 18993,  20,  24,  35,                  T|A|S  ), // 233 Airtaxi A21
-	MA( 22401,  20,  24,  30,                  T|A|S  ), // 234 Airtaxi A31
-	MA( 24472,  20,  24,  30,                  T|A|S  ), // 235 Airtaxi A32
+	MA(  2922,  20,  20,  30,                  T|A|S  ), // 215 Sampson U52
+	MA(  9922,  20,  24,  30,                  T|A|S  ), // 216 Coleman Count
+	MA( 12659,  20,  18,  30,                  T|A|S  ), // 217 FFP Dart
+	MA( 17652,  20,  25,  55,                  T|A|S  ), // 218 Yate Haugan
+	MA(  4929,  20,  30,  40,                  T|A|S  ), // 219 Bakewell Cotswald LB-3
+	MA( 13695,  20,  23,  35,                  T|A|S  ), // 220 Bakewell Luckett LB-8
+	MA( 16341,  20,  26,  40,                  T|A|S  ), // 221 Bakewell Luckett LB-9
+	MA( 21395,  20,  25,  40,                  T|A|S  ), // 222 Bakewell Luckett LB80
+	MA( 18263,  20,  20,  40,                  T|A|S  ), // 223 Bakewell Luckett LB-10
+	MA( 25233,  20,  25,  40,                  T|A|S  ), // 224 Bakewell Luckett LB-11
+	MA( 15371,  20,  22,  35,                  T|A|S  ), // 225 Yate Aerospace YAC 1-11
+	MA( 15461,  20,  25,  35,                  T|A|S  ), // 226 Darwin 100
+	MA( 16952,  20,  22,  35,                  T|A|S  ), // 227 Darwin 200
+	MA( 17227,  20,  25,  150,                  T|A|S  ), // 228 Darwin 300
+	MA( 22371,  20,  25,  45,                  T|A|S  ), // 229 Darwin 400
+	MA( 22341,  20,  25,  40,                  T|A|S  ), // 230 Darwin 500
+	MA( 27209,  20,  25,  80,                  T|A|S  ), // 231 Darwin 600
+	MA( 17988,  20,  20,  40,                  T|A|S  ), // 232 Guru Galaxy
+	MA( 18993,  20,  24,  45,                  T|A|S  ), // 233 Airtaxi A21
+	MA( 22401,  20,  24,  40,                  T|A|S  ), // 234 Airtaxi A31
+	MA( 24472,  20,  24,  40,                  T|A|S  ), // 235 Airtaxi A32
 	MA( 26724,  20,  24,  255,                  T|A|S  ), // 236 Airtaxi A33
-	MA( 22005,  20,  25,  30,                  T|A|S  ), // 237 Yate Aerospace YAe46
+	MA( 22005,  20,  25,  40,                  T|A|S  ), // 237 Yate Aerospace YAe46
 	MA( 24107,  20,  20,  255,                  T|A|S  ), // 238 Dinger 100
-	MA( 29310,  20,  25,  60,                  T|A|S  ), // 239 AirTaxi A34-1000
-	MA( 35520,  20,  22,  30,                  T|A|S  ), // 240 Yate Z-Shuttle
-	MA( 36981,  20,  22,  30,                  T|A|S  ), // 241 Kelling K1
-	MA( 38807,  20,  22,  50,                  T|A|S  ), // 242 Kelling K6
-	MA( 42094,  20,  25,  30,                  T|A|S  ), // 243 Kelling K7
-	MA( 44651,  20,  23,  30,                  T|A|S  ), // 244 Darwin 700
-	MA( 40268,  20,  25,  30,                  T|A|S  ), // 245 FFP Hyperdart 2
-	MA( 33693,  20,  25,  50,                  T|A|S  ), // 246 Dinger 200
-	MA( 32963,  20,  20,  60,                  T|A|S  ), // 247 Dinger 1000
-	MA(  9222,  20,  20,  35,                        Y), // 248 Ploddyphut 100
-	MA( 12874,  20,  20,  35,                        Y), // 249 Ploddyphut 500
-	MA( 16892,  20,  20,  35,                        Y), // 250 Flashbang X1
+	MA( 29310,  20,  25,  70,                  T|A|S  ), // 239 AirTaxi A34-1000
+	MA( 35520,  20,  22,  40,                  T|A|S  ), // 240 Yate Z-Shuttle
+	MA( 36981,  20,  22,  40,                  T|A|S  ), // 241 Kelling K1
+	MA( 38807,  20,  22,  60,                  T|A|S  ), // 242 Kelling K6
+	MA( 42094,  20,  25,  40,                  T|A|S  ), // 243 Kelling K7
+	MA( 44651,  20,  23,  40,                  T|A|S  ), // 244 Darwin 700
+	MA( 40268,  20,  25,  40,                  T|A|S  ), // 245 FFP Hyperdart 2
+	MA( 33693,  20,  25,  60,                  T|A|S  ), // 246 Dinger 200
+	MA( 32963,  20,  20,  70,                  T|A|S  ), // 247 Dinger 1000
+	MA(  9222,  20,  20,  45,                        Y), // 248 Ploddyphut 100
+	MA( 12874,  20,  20,  45,                        Y), // 249 Ploddyphut 500
+	MA( 16892,  20,  20,  45,                        Y), // 250 Flashbang X1
 	MA( 21275,  20,  20,  99,                        Y), // 251 Juggerplane M1
 	MA( 23832,  20,  20,  99,                        Y), // 252 Flashbang Wizzer
-	MA( 13575,  20,  20,  40,                  T|A|S  ), // 253 Tricario Helicopter
+	MA( 13575,  20,  20,  50,                  T|A|S  ), // 253 Tricario Helicopter
 	MA( 28215,  20,  20,  255,                  T|A|S  ), // 254 Guru X2 Helicopter
 	MA( 13575,  20,  20,  99,                        Y), // 255 Powernaut Helicopter
 };
@@ -598,7 +598,7 @@ static const AircraftVehicleInfo _orig_aircraft_vehicle_info[] = {
 	AVI(  1, 14,  85, P, SND_08_PLANE_TAKE_OFF,          18,  37,  4,  25 ), //  0 Sampson U52
 	AVI(  0, 15, 100, P, SND_08_PLANE_TAKE_OFF,          20,  37,  8,  65 ), //  1 Coleman Count
 	AVI(  2, 16, 130, J, SND_09_JET,                     35,  74, 10,  90 ), //  2 FFP Dart
-	AVI(  8, 75, 250, J, SND_3B_JET_OVERHEAD,            50, 181, 20, 100 ), //  3 Yate Haugan
+	AVI(  8, 95, 250, J, SND_3B_JET_OVERHEAD,            50, 181, 20, 100 ), //  3 Yate Haugan
 	AVI(  5, 15,  98, P, SND_08_PLANE_TAKE_OFF,          20,  37,  6,  30 ), //  4 Bakewell Cotswald LB-3
 	AVI(  6, 18, 240, J, SND_09_JET,                     40,  74, 30, 200 ), //  5 Bakewell Luckett LB-8
 	AVI(  2, 17, 150, P, SND_09_JET,                     35,  74, 15, 100 ), //  6 Bakewell Luckett LB-9
@@ -608,15 +608,15 @@ static const AircraftVehicleInfo _orig_aircraft_vehicle_info[] = {
 	AVI(  2, 16, 135, J, SND_09_JET,                     35,  74, 10,  95 ), // 10 Yate Aerospace YAC 1-11
 	AVI(  2, 18, 240, J, SND_09_JET,                     40,  74, 35, 170 ), // 11 Darwin 100
 	AVI(  4, 17, 155, J, SND_09_JET,                     40,  74, 15, 110 ), // 12 Darwin 200
-	AVI(  7, 30, 253, J, SND_3D_ANOTHER_JET_OVERHEAD,    40,  74, 50, 300 ), // 13 Darwin 300
+	AVI(  7, 50, 253, J, SND_3D_ANOTHER_JET_OVERHEAD,    40,  74, 50, 300 ), // 13 Darwin 300
 	AVI(  4, 18, 210, J, SND_09_JET,                     40,  74, 25, 200 ), // 14 Darwin 400
 	AVI(  4, 19, 220, J, SND_09_JET,                     40,  74, 25, 240 ), // 15 Darwin 500
-	AVI(  4, 27, 230, J, SND_09_JET,                     40,  74, 40, 260 ), // 16 Darwin 600
+	AVI(  4, 40, 230, J, SND_09_JET,                     40,  74, 40, 260 ), // 16 Darwin 600
 	AVI(  3, 25, 225, J, SND_09_JET,                     40,  74, 35, 240 ), // 17 Guru Galaxy
 	AVI(  4, 20, 235, J, SND_09_JET,                     40,  74, 30, 260 ), // 18 Airtaxi A21
 	AVI(  4, 19, 220, J, SND_09_JET,                     40,  74, 25, 210 ), // 19 Airtaxi A31
 	AVI(  4, 18, 170, J, SND_09_JET,                     40,  74, 20, 160 ), // 20 Airtaxi A32
-	AVI(  4, 26, 210, J, SND_09_JET,                     40,  74, 20, 220 ), // 21 Airtaxi A33
+	AVI(  4, 35, 210, J, SND_09_JET,                     40,  74, 20, 220 ), // 21 Airtaxi A33
 	AVI(  6, 16, 125, P, SND_09_JET,                     50,  74, 10,  80 ), // 22 Yate Aerospace YAe46
 	AVI(  2, 17, 145, P, SND_09_JET,                     40,  74, 10,  85 ), // 23 Dinger 100
 	AVI( 11, 16, 130, P, SND_09_JET,                     40,  74, 10,  75 ), // 24 AirTaxi A34-1000
