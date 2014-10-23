@@ -676,9 +676,14 @@ const SaveLoad *GetVehicleDescription(VehicleType vt)
 		 SLE_CONDVAR(Vehicle, vehicle_flags,         SLE_UINT16,                 180, SL_MAX_VERSION),
 
 		 SLE_CONDVAR(Vehicle, profit_this_year,      SLE_FILE_I32 | SLE_VAR_I64,   0,  64),
-		 SLE_CONDVAR(Vehicle, profit_this_year,      SLE_INT64,                   65, SL_MAX_VERSION),
+		 SLE_CONDVAR(Vehicle, profit_this_year,      SLE_INT64,                   192, SL_MAX_VERSION),
 		 SLE_CONDVAR(Vehicle, profit_last_year,      SLE_FILE_I32 | SLE_VAR_I64,   0,  64),
-		 SLE_CONDVAR(Vehicle, profit_last_year,      SLE_INT64,                   65, SL_MAX_VERSION),
+		 SLE_CONDVAR(Vehicle, profit_last_year,      SLE_INT64,                   192, SL_MAX_VERSION),
+		 SLE_CONDVAR(Vehicle, profit_this_quarter,      SLE_FILE_I32 | SLE_VAR_I64,   0,  64),
+		 SLE_CONDVAR(Vehicle, profit_this_quarter,      SLE_INT64,                   65, SL_MAX_VERSION),
+		 SLE_CONDVAR(Vehicle, profit_last_quarter,      SLE_FILE_I32 | SLE_VAR_I64,   0,  64),
+		 SLE_CONDVAR(Vehicle, profit_last_quarter,      SLE_INT64,                   65, SL_MAX_VERSION),
+
 		SLEG_CONDVAR(         _cargo_feeder_share,   SLE_FILE_I32 | SLE_VAR_I64,  51,  64),
 		SLEG_CONDVAR(         _cargo_feeder_share,   SLE_INT64,                   65,  67),
 		SLEG_CONDVAR(         _cargo_loaded_at_xy,   SLE_UINT32,                  51,  67),

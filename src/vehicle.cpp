@@ -1436,6 +1436,7 @@ void VehicleEnterDepot(Vehicle *v)
 				}
 			} else if (cost.GetCost() != 0) {
 				v->profit_this_year -= cost.GetCost() << 8;
+				v->profit_this_quarter -= cost.GetCost() << 8;
 				if (v->owner == _local_company) {
 					ShowCostOrIncomeAnimation(v->x_pos, v->y_pos, v->z_pos, cost.GetCost());
 				}
@@ -2569,35 +2570,26 @@ void Vehicle::RemoveFromShared()
 	this->previous_shared = NULL;
 }
 
-void VehiclesYearlyLoop(int quarter = 0)
+void VehiclesYearlyLoop()
 {
 	Vehicle *v;
 	FOR_ALL_VEHICLES(v) {
 		if (v->IsPrimaryVehicle()) {
 			/* show warning if vehicle is not generating enough income last 2 years (corresponds to a red icon in the vehicle list) */
 			Money profit = v->GetDisplayProfitThisYear();
-			if (v->age >= 730 && profit < 0) {
+			if (v->age >= (730 / COST_MULTIPLIER) && profit < 0) {
 				if (_settings_client.gui.vehicle_income_warn && v->owner == _local_company) {
 					SetDParam(0, v->index);
-                    if (quarter == 0) {
-					    SetDParam(1, profit);
-    					AddVehicleAdviceNewsItem(STR_NEWS_VEHICLE_IS_UNPROFITABLE, v->index);
-                    } else {       
-                        char *quarter_name;
-                        switch(quarter) {
-                            case 1: SetDParamStr(1, "first"); break;
-                            case 2: SetDParamStr(1, "second"); break;
-                            case 3: SetDParamStr(1, "third"); break;
-                        }
-					    SetDParam(2, profit);
-                        AddVehicleAdviceNewsItem(STR_NEWS_VEHICLE_IS_UNPROFITABLE_QUARTER, v->index);
-                    }
+                    SetDParam(1, profit);
+                    AddVehicleAdviceNewsItem(STR_NEWS_VEHICLE_IS_UNPROFITABLE, v->index);
 				}
 				AI::NewEvent(v->owner, new ScriptEventVehicleUnprofitable(v->index));
 			}
 
 			v->profit_last_year = v->profit_this_year;
 			v->profit_this_year = 0;
+            v->profit_last_quarter = v->profit_this_quarter;
+            v->profit_this_quarter = 0;
 			SetWindowDirty(WC_VEHICLE_DETAILS, v->index);
 		}
 	}
@@ -2608,6 +2600,42 @@ void VehiclesYearlyLoop(int quarter = 0)
 	SetWindowClassesDirty(WC_AIRCRAFT_LIST);
 }
 
+void VehiclesQuarterlyLoop()
+{
+    if (_cur_quarter == 4)
+        return;
+
+	Vehicle *v;
+	FOR_ALL_VEHICLES(v) {
+		if (v->IsPrimaryVehicle()) {
+			/* show warning if vehicle is not generating enough income last 2 years (corresponds to a red icon in the vehicle list) */
+			Money profit = v->GetDisplayProfitThisQuarter();
+			if (v->age >= (730 / COST_MULTIPLIER) && profit < 0) {
+				if (_settings_client.gui.vehicle_income_warn && v->owner == _local_company) {
+					SetDParam(0, v->index);
+                    char *quarter_name;
+                    switch(_cur_quarter) {
+                        case 1: SetDParamStr(1, "first"); break;
+                        case 2: SetDParamStr(1, "second"); break;
+                        case 3: SetDParamStr(1, "third"); break;
+                    }
+                    SetDParam(2, profit);
+                    AddVehicleAdviceNewsItem(STR_NEWS_VEHICLE_IS_UNPROFITABLE_QUARTER, v->index);
+				}
+				AI::NewEvent(v->owner, new ScriptEventVehicleUnprofitable(v->index));
+			}
+
+            v->profit_last_quarter = v->profit_this_quarter;
+            v->profit_this_quarter = 0;
+			SetWindowDirty(WC_VEHICLE_DETAILS, v->index);
+		}
+	}
+	GroupStatistics::UpdateProfits();
+	SetWindowClassesDirty(WC_TRAINS_LIST);
+	SetWindowClassesDirty(WC_SHIPS_LIST);
+	SetWindowClassesDirty(WC_ROADVEH_LIST);
+	SetWindowClassesDirty(WC_AIRCRAFT_LIST);
+}
 
 /**
  * Can this station be used by the given engine type?

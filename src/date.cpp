@@ -173,7 +173,8 @@ extern void StationMonthlyLoop();
 extern void SubsidyMonthlyLoop();
 
 extern void CompaniesYearlyLoop();
-extern void VehiclesYearlyLoop(int quarter = 0);
+extern void VehiclesYearlyLoop();
+extern void VehiclesQuarterlyLoop();
 extern void TownsYearlyLoop();
 
 extern void ShowEndGameChart();
@@ -191,7 +192,7 @@ static const Month _autosave_months[] = {
 static void OnNewQuarter()
 {
     if (_cur_quarter < 4)
-        VehiclesYearlyLoop(_cur_quarter);
+        VehiclesQuarterlyLoop();
 }
 
 /**

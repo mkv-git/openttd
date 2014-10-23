@@ -3994,6 +3994,7 @@ void Train::OnNewDay()
             cost.AffectCost();
 
 			this->profit_this_year -= cost.GetCost();
+			this->profit_this_quarter -= cost.GetCost();
 			this->running_ticks = 0;
 
 			SubtractMoneyFromCompanyFract(this->owner, cost);

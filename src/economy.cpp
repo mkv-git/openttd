@@ -1158,6 +1158,7 @@ CargoPayment::~CargoPayment()
 
 	SubtractMoneyFromCompany(CommandCost(this->front->GetExpenseType(true), -this->route_profit));
 	this->front->profit_this_year += (this->visual_profit + this->visual_transfer) << 8;
+	this->front->profit_this_quarter += (this->visual_profit + this->visual_transfer) << 8;
 
 	if (this->route_profit != 0 && IsLocalCompany() && !PlayVehicleSound(this->front, VSE_LOAD_UNLOAD)) {
 		SndPlayVehicleFx(SND_14_CASHTILL, this->front);
@@ -1519,7 +1520,10 @@ static void HandleStationRefit(Vehicle *v, CargoArray &consist_capleft, Station 
 	if (new_cid < NUM_CARGO && new_cid != v_start->cargo_type) {
 		IterateVehicleParts(v_start, ReturnCargoAction(st, StationIDStack(next_station).Pop()));
 		CommandCost cost = DoCommand(v_start->tile, v_start->index, new_cid | 1U << 6 | 0xFF << 8 | 1U << 16, DC_EXEC, GetCmdRefitVeh(v_start)); // Auto-refit and only this vehicle including artic parts.
-		if (cost.Succeeded()) v->First()->profit_this_year -= cost.GetCost() << 8;
+		if (cost.Succeeded()) {
+            v->First()->profit_this_year -= cost.GetCost() << 8;
+            v->First()->profit_this_quarter -= cost.GetCost() << 8;
+        }
 	}
 
 	/* Add new capacity to consist capacity and reserve cargo */

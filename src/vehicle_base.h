@@ -23,6 +23,7 @@
 #include "transport_type.h"
 #include "group_type.h"
 #include "base_consist.h"
+#include "date_func.h"
 #include <list>
 #include <map>
 
@@ -169,6 +170,8 @@ public:
 
 	Money profit_this_year;             ///< Profit this year << 8, low 8 bits are fract
 	Money profit_last_year;             ///< Profit last year << 8, low 8 bits are fract
+    Money profit_this_quarter;
+    Money profit_last_quarter;
 	Money value;                        ///< Value of the vehicle
 
 	CargoPayment *cargo_payment;        ///< The cargo payment we're currently in
@@ -503,6 +506,19 @@ public:
 	 */
 	Money GetDisplayProfitLastYear() const { return (this->profit_last_year >> 8); }
 
+	/**
+	 * Gets the profit vehicle had this quarter. It can be sent into SetDParam for string processing.
+	 * @return the vehicle's profit this quarter
+	 */
+	Money GetDisplayProfitThisQuarter() const { return (this->profit_this_quarter >> 8); }
+
+	/**
+	 * Gets the profit vehicle had last quarter. It can be sent into SetDParam for string processing.
+	 * @return the vehicle's profit last quarter
+	 */
+	Money GetDisplayProfitLastQuarter() const { return (this->profit_last_quarter >> 8); }
+
+
 	void SetNext(Vehicle *next);
 
 	/**
@@ -652,6 +668,9 @@ public:
 
 		this->profit_this_year = src->profit_this_year;
 		this->profit_last_year = src->profit_last_year;
+		this->profit_this_quarter = src->profit_this_quarter;
+		this->profit_last_quarter = src->profit_last_quarter;
+
 	}
 
 

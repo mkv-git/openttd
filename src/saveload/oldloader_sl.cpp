@@ -1206,6 +1206,9 @@ static const OldChunks vehicle_chunk[] = {
 
 	OCL_SVAR( OC_FILE_I32 | OC_VAR_I64, Vehicle, profit_this_year ),
 	OCL_SVAR( OC_FILE_I32 | OC_VAR_I64, Vehicle, profit_last_year ),
+	OCL_SVAR( OC_FILE_I32 | OC_VAR_I64, Vehicle, profit_this_quarter ),
+	OCL_SVAR( OC_FILE_I32 | OC_VAR_I64, Vehicle, profit_last_quarter ),
+
 
 	OCL_VAR ( OC_UINT16,   1, &_old_next_ptr ),
 

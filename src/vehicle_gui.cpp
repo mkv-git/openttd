@@ -1912,12 +1912,13 @@ struct VehicleDetailsWindow : Window {
 				Dimension dim = { 0, 0 };
 				size->height = WD_FRAMERECT_TOP + 4 * FONT_HEIGHT_NORMAL + WD_FRAMERECT_BOTTOM;
 
-				for (uint i = 0; i < 4; i++) SetDParamMaxValue(i, INT16_MAX);
+				for (uint i = 0; i < 5; i++) SetDParamMaxValue(i, INT16_MAX);
 				static const StringID info_strings[] = {
 					STR_VEHICLE_INFO_MAX_SPEED,
 					STR_VEHICLE_INFO_WEIGHT_POWER_MAX_SPEED,
 					STR_VEHICLE_INFO_WEIGHT_POWER_MAX_SPEED_MAX_TE,
 					STR_VEHICLE_INFO_PROFIT_THIS_YEAR_LAST_YEAR,
+                    STR_VEHICLE_INFO_PROFIT_THIS_QUARTER_LAST_QUARTER,
 					STR_VEHICLE_INFO_RELIABILITY_BREAKDOWNS
 				};
 				for (uint i = 0; i < lengthof(info_strings); i++) {
@@ -2061,6 +2062,12 @@ struct VehicleDetailsWindow : Window {
 				SetDParam(0, v->GetDisplayProfitThisYear());
 				SetDParam(1, v->GetDisplayProfitLastYear());
 				DrawString(r.left + WD_FRAMERECT_LEFT, r.right - WD_FRAMERECT_RIGHT, y, STR_VEHICLE_INFO_PROFIT_THIS_YEAR_LAST_YEAR);
+				y += FONT_HEIGHT_NORMAL;
+
+				/* Draw profit */
+				SetDParam(0, v->GetDisplayProfitThisQuarter());
+				SetDParam(1, v->GetDisplayProfitLastQuarter());
+				DrawString(r.left + WD_FRAMERECT_LEFT, r.right - WD_FRAMERECT_RIGHT, y, STR_VEHICLE_INFO_PROFIT_THIS_QUARTER_LAST_QUARTER);
 				y += FONT_HEIGHT_NORMAL;
 
 				/* Draw breakdown & reliability */

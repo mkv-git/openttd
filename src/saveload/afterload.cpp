@@ -1812,6 +1812,8 @@ bool AfterLoadGame()
 		FOR_ALL_VEHICLES(v) {
 			v->profit_this_year <<= 8;
 			v->profit_last_year <<= 8;
+			v->profit_this_quarter <<= 8;
+			v->profit_last_quarter <<= 8;
 			v->running_ticks = 0;
 		}
 	}
