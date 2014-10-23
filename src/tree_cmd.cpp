@@ -655,7 +655,9 @@ static void TileLoop_Trees(TileIndex tile)
 		}
 	}
 	if (GetTreeCounter(tile) < 15) {
-		AddTreeCounter(tile, 1);
+        uint16 prob = 0x10000 / 20;
+        if (GB(Random(), 0, 16) < prob) 
+            AddTreeCounter(tile, 1);
 		return;
 	}
 	SetTreeCounter(tile, 0);
