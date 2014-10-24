@@ -101,6 +101,8 @@ void SetTrainGroupID(Train *v, GroupID grp);
 void UpdateTrainGroupID(Train *v);
 void RemoveVehicleFromGroup(const Vehicle *v);
 void RemoveAllGroupsForCompany(const CompanyID company);
+void SaveGroupsPreferences();
+void LoadGroupsPreferences();
 
 extern GroupID _new_group_id;
 

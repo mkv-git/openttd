@@ -10,6 +10,8 @@
 /** @file group_cmd.cpp Handling of the engine groups */
 
 #include "stdafx.h"
+#include <fstream>
+#include <iostream>
 #include "cmd_helper.h"
 #include "command_func.h"
 #include "train.h"
@@ -650,4 +652,64 @@ void RemoveAllGroupsForCompany(const CompanyID company)
 	FOR_ALL_GROUPS(g) {
 		if (company == g->owner) delete g;
 	}
+}
+
+void SaveGroupsPreferences()
+{
+
+    const Group *g;
+    std::ofstream f_obj("group_prefs.dat");
+    char buffer[255];
+    FOR_ALL_GROUPS(g) {
+        sprintf(buffer, "%s,%d\n", g->name, int(g->vehicle_type));
+        std::cout << buffer << std::endl;
+        f_obj << buffer;
+    }
+    f_obj.close();
+}
+
+void CreateNewGroup(std::string name, VehicleType v_type)
+{
+    const char *c_name = name.c_str();
+    Group *g = new Group(_current_company);
+    g->vehicle_type = v_type;
+    g->name = strdup(c_name);
+}
+
+void LoadGroupsPreferences()
+{
+    const Group *g;
+    VehicleType vehicle_type;
+    const char *name;
+    std::string line;
+    std::ifstream f_obj("group_prefs.dat");
+    std::string buf[2];
+
+    while (std::getline(f_obj, line)) {
+        int pos = 0;
+        int i = 0;
+
+        while (pos != -1){
+            pos = line.find(",");
+            std::string c;
+            c = line.substr(0, pos);
+            line.erase(0, pos+1);
+            buf[i] = c;
+            i++;
+        }
+
+        switch(atoi(buf[1].c_str())) {
+            case 0: vehicle_type = VEH_TRAIN; break;
+            case 1: vehicle_type = VEH_ROAD; break;
+            case 2: vehicle_type = VEH_SHIP; break;
+            case 3: vehicle_type = VEH_AIRCRAFT; break;
+            default: continue;
+        }
+
+        CreateNewGroup(buf[0], vehicle_type);
+        std::fill_n(buf, 2, 0);
+    }
+
+    f_obj.close();
+
 }
