@@ -10,6 +10,9 @@
 /** @file group_gui.cpp GUI for the group window. */
 
 #include "stdafx.h"
+#include <vector>
+#include <algorithm>
+#include <iostream>
 #include "textbuf_gui.h"
 #include "command_func.h"
 #include "vehicle_gui.h"
@@ -70,11 +73,17 @@ static const NWidgetPart _nested_group_widgets[] = {
 				NWidget(WWT_DROPDOWN, COLOUR_GREY, WID_GL_SORT_BY_DROPDOWN), SetMinimalSize(167, 12), SetDataTip(0x0, STR_TOOLTIP_SORT_CRITERIA),
 				NWidget(WWT_PANEL, COLOUR_GREY), SetMinimalSize(12, 12), SetResize(1, 0), EndContainer(),
 			EndContainer(),
+
 			NWidget(NWID_HORIZONTAL),
 				NWidget(WWT_MATRIX, COLOUR_GREY, WID_GL_LIST_VEHICLE), SetMinimalSize(248, 0), SetMatrixDataTip(1, 0, STR_NULL), SetResize(1, 1), SetFill(1, 0), SetScrollbar(WID_GL_LIST_VEHICLE_SCROLLBAR),
 				NWidget(NWID_VSCROLLBAR, COLOUR_GREY, WID_GL_LIST_VEHICLE_SCROLLBAR),
 			EndContainer(),
+
+            NWidget(NWID_HORIZONTAL),
+                NWidget(WWT_PANEL, COLOUR_GREY, WID_GL_PROFIT_INFO), SetMinimalSize(248, 28), SetResize(1, 0), EndContainer(),           
+            EndContainer(),
 			NWidget(WWT_PANEL, COLOUR_GREY), SetMinimalSize(1, 0), SetFill(1, 1), SetResize(1, 0), EndContainer(),
+
 			NWidget(NWID_HORIZONTAL),
 				NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_GL_AVAILABLE_VEHICLES), SetMinimalSize(106, 12), SetFill(0, 1),
 						SetDataTip(STR_BLACK_STRING, STR_VEHICLE_LIST_AVAILABLE_ENGINES_TOOLTIP),
@@ -197,6 +206,106 @@ private:
 			this->column_size[VGC_NUMBER].width + 2 +
 			WD_FRAMERECT_RIGHT;
 	}
+
+    void GetMinMaxAvgSum(const std::vector<int> in_val, int *ret_val) const
+    {
+        // min, max, avg, sum
+        for (size_t i=0; i < in_val.size(); i++) {
+            ret_val[0] = std::min(ret_val[0], in_val[i]);
+            ret_val[1] = std::max(ret_val[1], in_val[i]);
+            ret_val[3] += in_val[i];
+        }
+        ret_val[2] = ret_val[3] / in_val.size();
+    }
+
+    void DrawGroupProfitInfo(int y, int left, int right) const
+    {
+        if (IsAllGroupID(this->vli.index) || IsDefaultGroupID(this->vli.index) || !Group::IsValidID(this->vli.index))
+            return;
+
+        const Vehicle *vehicle;
+        std::vector< std::vector<int> > profits(4);
+
+        FOR_ALL_VEHICLES(vehicle) {
+            if (vehicle->type != this->vli.vtype || (!vehicle->IsPrimaryVehicle()))
+                continue;
+            if (vehicle->group_id != this->vli.index)
+                continue;
+
+            profits[0].push_back(int(vehicle->profit_this_quarter >> 8));
+            profits[1].push_back(int(vehicle->profit_last_quarter >> 8));
+            profits[2].push_back(int(vehicle->profit_this_year >> 8));
+            profits[3].push_back(int(vehicle->profit_last_year >> 8));
+        }
+
+        Dimension dim = {0, 0,};
+        static const StringID info_strings[] = {
+            STR_GROUP_PROFIT_MIN,
+            STR_GROUP_PROFIT_MAX,
+            STR_GROUP_PROFIT_AVG,
+            STR_GROUP_PROFIT_TOTAL,
+        };
+
+        int base_y = y + FONT_HEIGHT_SMALL + 5;
+        for (uint i = 0; i < lengthof(info_strings); i++) {
+            dim = maxdim(dim, GetStringBoundingBox(info_strings[i]));
+            DrawString(left, right, base_y, info_strings[i]);
+            base_y += FONT_HEIGHT_SMALL;
+        }
+
+        left += dim.width + 5;
+        right += dim.width + 5;
+
+        SetDParamMaxValue(0, INT32_MAX);
+        Dimension c_dim = GetStringBoundingBox(STR_GROUP_NEGATIVE_INCOME);
+
+        // current quarter
+        SetDParam(0, _cur_year);
+        SetDParam(1, _cur_quarter + 1);
+        DrawString(left, right, y, STR_GROUP_PROFIT_QUARTER_CAPTION);
+
+        // last quarter
+        int quarter = _cur_quarter != 0 ? _cur_quarter: 4;
+        int year = _cur_quarter != 0 ? _cur_year: _cur_year -1;
+        SetDParam(0, year);
+        SetDParam(1, quarter);
+        DrawString(left + c_dim.width, right + c_dim.width, y, STR_GROUP_PROFIT_QUARTER_CAPTION);
+
+        // current year total
+        SetDParam(0, _cur_year);
+        DrawString(left + c_dim.width * 2, right + c_dim.width * 2, y, STR_GROUP_PROFIT_YEAR_CAPTION);
+
+        // last year total
+        SetDParam(0, _cur_year - 1);
+        DrawString(left + c_dim.width * 3, right + c_dim.width * 3, y, STR_GROUP_PROFIT_YEAR_CAPTION);
+
+        for (size_t i=0; i < profits.size(); i++) {
+            if (profits[i].size() == 0)
+                continue;
+
+            int dummy[4] = {INT_MAX, INT_MIN, 0, 0};
+            this->GetMinMaxAvgSum(profits[i], dummy);
+            this->DrawGroupProfitColumn(y + FONT_HEIGHT_SMALL + 5, left, right, dummy, i);
+        }
+    }
+
+    void DrawGroupProfitColumn(int y, int x1, int x2, int *values, int col_idx) const
+    {
+
+        for (int i=0; i < 4; i++) {
+            SetDParamMaxValue(0, INT32_MAX);
+            Dimension xtra_width = GetStringBoundingBox(STR_GROUP_NEGATIVE_INCOME);
+            SetDParam(0, values[i]);
+            int left = x1 + (xtra_width.width * col_idx);
+            int right = x2 + (xtra_width.width * col_idx);
+            if (values[i] >= 0)
+                DrawString(left, right, y, STR_GROUP_POSITIVE_INCOME);
+            else
+                DrawString(left, right, y, STR_GROUP_NEGATIVE_INCOME);
+            y += FONT_HEIGHT_SMALL;
+
+        }
+    }
 
 	/**
 	 * Draw a row in the group list.
@@ -335,7 +444,7 @@ public:
 				resize->height = this->tiny_step_height;
 
 				/* Minimum height is the height of the list widget minus all and default vehicles... */
-				size->height =  4 * GetVehicleListHeight(this->vli.vtype, this->tiny_step_height) - 2 * this->tiny_step_height;
+				size->height =  4 * GetVehicleListHeight(this->vli.vtype, this->tiny_step_height) - this->tiny_step_height + 45;
 
 				/* ... minus the buttons at the bottom ... */
 				uint max_icon_height = GetSpriteSize(this->GetWidget<NWidgetCore>(WID_GL_CREATE_GROUP)->widget_data).height;
@@ -375,6 +484,26 @@ public:
 				*size = maxdim(*size, d);
 				break;
 			}
+
+            case WID_GL_PROFIT_INFO: {
+
+                size->height = WD_FRAMERECT_TOP + 5 * FONT_HEIGHT_SMALL + WD_FRAMERECT_BOTTOM + 10;
+                Dimension dim = { 0, 0 };
+                static const StringID info_strings[] = {
+                    STR_GROUP_PROFIT_MIN,
+                    STR_GROUP_PROFIT_MAX,
+                    STR_GROUP_PROFIT_AVG,
+                    STR_GROUP_PROFIT_TOTAL,
+                };
+                for (uint i = 0; i < lengthof(info_strings); i++) {
+                    dim = maxdim(dim, GetStringBoundingBox(info_strings[i]));
+                }
+                           
+                SetDParamMaxValue(0, INT32_MAX);
+                Dimension dim_income = GetStringBoundingBox(STR_GROUP_NEGATIVE_INCOME);
+                size->width = dim.width + 5 + dim_income.width * 4 + WD_FRAMERECT_LEFT + WD_FRAMERECT_RIGHT;
+                break;
+            }
 		}
 	}
 
@@ -525,6 +654,10 @@ public:
 			case WID_GL_LIST_VEHICLE:
 				this->DrawVehicleListItems(this->vehicle_sel, this->resize.step_height, r);
 				break;
+
+            case WID_GL_PROFIT_INFO:
+                DrawGroupProfitInfo(r.top + WD_FRAMERECT_TOP, r.left, r.right);
+                break;
 		}
 	}
 

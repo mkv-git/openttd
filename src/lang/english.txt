@@ -3333,6 +3333,15 @@ STR_GROUP_REMOVE_ALL_VEHICLES                                   :Remove all vehi
 
 STR_GROUP_RENAME_CAPTION                                        :{BLACK}Rename a group
 
+STR_GROUP_PROFIT_MIN                                            :{TINY_FONT}{BLACK}Min:
+STR_GROUP_PROFIT_MAX                                            :{TINY_FONT}{BLACK}Max:
+STR_GROUP_PROFIT_AVG                                            :{TINY_FONT}{BLACK}Avg:
+STR_GROUP_PROFIT_TOTAL                                          :{TINY_FONT}{BLACK}Sum:
+STR_GROUP_POSITIVE_INCOME                                       :{TINY_FONT}{BLACK}{CURRENCY_LONG}
+STR_GROUP_NEGATIVE_INCOME                                       :{TINY_FONT}{BLACK}{CURRENCY_LONG}
+STR_GROUP_PROFIT_YEAR_CAPTION                                   :{TINY_FONT}{YELLOW}{NUM}
+STR_GROUP_PROFIT_QUARTER_CAPTION                                :{TINY_FONT}{YELLOW}{NUM} Q{NUM}
+
 # Build vehicle window
 STR_BUY_VEHICLE_TRAIN_RAIL_CAPTION                              :New Rail Vehicles
 STR_BUY_VEHICLE_TRAIN_ELRAIL_CAPTION                            :New Electric Rail Vehicles

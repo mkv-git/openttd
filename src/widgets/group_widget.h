@@ -23,7 +23,8 @@ enum GroupListWidgets {
 	WID_GL_MANAGE_VEHICLES_DROPDOWN, ///< Manage vehicles dropdown list.
 	WID_GL_STOP_ALL,                 ///< Stop all button.
 	WID_GL_START_ALL,                ///< Start all button.
-
+    
+    WID_GL_PROFIT_INFO,
 	WID_GL_ALL_VEHICLES,             ///< All vehicles entry.
 	WID_GL_DEFAULT_VEHICLES,         ///< Default vehicles entry.
 	WID_GL_LIST_GROUP,               ///< List of the groups.
