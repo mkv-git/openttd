@@ -357,6 +357,7 @@ STR_SCENEDIT_FILE_MENU_SAVE_SCENARIO                            :Save scenario
 STR_SCENEDIT_FILE_MENU_LOAD_SCENARIO                            :Load scenario
 STR_SCENEDIT_FILE_MENU_SAVE_HEIGHTMAP                           :Save heightmap
 STR_SCENEDIT_FILE_MENU_LOAD_HEIGHTMAP                           :Load heightmap
+STR_LOAD_TOWNS                                                  :Load towns
 STR_SCENEDIT_FILE_MENU_QUIT_EDITOR                              :Abandon scenario editor
 STR_SCENEDIT_FILE_MENU_SEPARATOR                                :
 STR_SCENEDIT_FILE_MENU_QUIT                                     :Exit
@@ -381,8 +382,10 @@ STR_SETTINGS_MENU_TRANSPARENT_SIGNS                             :Transparent sig
 
 ############ range for file menu starts
 STR_FILE_MENU_SAVE_GAME                                         :Save game
+STR_SAVE_PREFERENCES                                            :Save preferences
 STR_FILE_MENU_LOAD_GAME                                         :Load game
 STR_FILE_MENU_QUIT_GAME                                         :Abandon game
+STR_LOAD_SIGNS_AND_GROUPS                                       :Load signs & groups
 STR_FILE_MENU_SEPARATOR                                         :
 STR_FILE_MENU_EXIT                                              :Exit
 ############ range ends here
@@ -3256,6 +3259,10 @@ STR_INDUSTRY_DIRECTORY_LIST_CAPTION                             :{BLACK}Industry
 # Industry view
 STR_INDUSTRY_VIEW_CAPTION                                       :{WHITE}{INDUSTRY}
 STR_INDUSTRY_VIEW_PRODUCTION_LAST_MONTH_TITLE                   :{BLACK}Production last month:
+STR_INDUSTRY_CONSTRUCTED_AT                                     :{BLACK}Built at: {YELLOW}{DATE_SHORT}
+STR_INDUSTRY_CARGO_LAST_ACCEPTED_AT                             :{BLACK}Cargo last accepted at: {YELLOW}{DATE_SHORT}
+STR_INDUSTRY_LAST_PRODUCTION_YEAR                               :{BLACK}Last production year {YELLOW}{NUM}
+STR_INDUSTRY_VIEW_LAST_ACCEPTED_CARGO_DATA                      :{BLACK}
 STR_INDUSTRY_VIEW_TRANSPORTED                                   :{YELLOW}{CARGO_LONG}{RAW_STRING}{BLACK} ({COMMA}% transported)
 STR_INDUSTRY_VIEW_LOCATION_TOOLTIP                              :{BLACK}Centre the main view on industry location. Ctrl+Click opens a new viewport on industry location
 STR_INDUSTRY_VIEW_PRODUCTION_LEVEL                              :{BLACK}Production level: {YELLOW}{COMMA}%
@@ -4932,3 +4939,4 @@ STR_PLANE                                                       :{BLACK}{PLANE}
 STR_SHIP                                                        :{BLACK}{SHIP}
 
 STR_TOOLBAR_RAILTYPE_VELOCITY                                   :{STRING} ({VELOCITY})
+STR_VEHICLE_LONGER_THAN_STATION                                 ::{WHITE}{VEHICLE} is longer than station {STATION}

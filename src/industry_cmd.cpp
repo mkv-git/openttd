@@ -1323,18 +1323,53 @@ static CheckNewIndustryProc * const _check_new_industry_procs[CHECK_END] = {
 static CommandCost FindTownForIndustry(TileIndex tile, int type, Town **t)
 {
 	*t = ClosestTownFromTile(tile, UINT_MAX);
+    const int town_population = (*t)->cache.population;
+    int bank_count = 0;
+    const Industry *i;
+    //const char *town_name = FetchTownName(*t);
+    bool no_more_banks = false;
 
-	if (_settings_game.economy.multiple_industry_per_town) return CommandCost();
+    if (((_settings_game.economy.multiple_industry_per_town) || (type == IT_BANK_TEMP)) && (town_population > 1200)) {
+        FOR_ALL_INDUSTRIES(i) {
+            try {
+                if (i->town != *t)
+                    continue;
+                else if ((i->town == *t) and (i->type == IT_BANK_TEMP))
+                    bank_count++;
 
-	const Industry *i;
-	FOR_ALL_INDUSTRIES(i) {
-		if (i->type == (byte)type && i->town == *t) {
-			*t = NULL;
-			return_cmd_error(STR_ERROR_ONLY_ONE_ALLOWED_PER_TOWN);
-		}
-	}
+                if (bank_count > 2) {
+                    no_more_banks = true;
+                }
 
-	return CommandCost();
+                if (bank_count == 1 && (town_population < 10000)) {
+                    no_more_banks = true;
+                }
+
+                if (bank_count == 2 && (town_population < 20000)) {
+                    no_more_banks = true;
+                }
+
+                if (no_more_banks) {
+                    *t = NULL;
+                    return_cmd_error(STR_ERROR_ONLY_ONE_ALLOWED_PER_TOWN);
+                }
+                no_more_banks = false;
+            } catch (int e) {
+                continue;
+            }
+        }
+
+        return CommandCost();
+    }
+
+    FOR_ALL_INDUSTRIES(i) {
+        if (i->type == (byte)type && i->town == *t) {
+            *t = NULL;
+            return_cmd_error(STR_ERROR_ONLY_ONE_ALLOWED_PER_TOWN);
+        }
+    }
+
+    return CommandCost();
 }
 
 bool IsSlopeRefused(Slope current, Slope refused)
@@ -2508,7 +2543,13 @@ static void ChangeIndustryProduction(Industry *i, bool monthly)
 		}
 	} else {
 		if (monthly != smooth_economy) return;
-		if (indspec->life_type == INDUSTRYLIFE_BLACK_HOLE) return;
+        if (indspec->life_type == INDUSTRYLIFE_BLACK_HOLE) {
+            if (i->construction_date < (_date - DAYS_IN_YEAR * 15)) {
+                closeit = (i->last_cargo_accepted_at < (_date - DAYS_IN_YEAR * 5));
+            } else {
+                return;
+            }
+        }
 	}
 
 	if (standard || (!callback_enabled && (indspec->life_type & (INDUSTRYLIFE_ORGANIC | INDUSTRYLIFE_EXTRACTIVE)) != 0)) {
@@ -2614,6 +2655,15 @@ static void ChangeIndustryProduction(Industry *i, bool monthly)
 	/* Recalculate production_rate
 	 * For non-smooth economy these should always be synchronized with prod_level */
 	if (recalculate_multipliers) i->RecomputeProductionMultipliers();
+
+    if ((indspec->life_type != INDUSTRYLIFE_BLACK_HOLE) && (!closeit)) {
+        if (i->construction_date < (_date - DAYS_IN_YEAR * 15)) {
+            if (indspec->life_type & INDUSTRYLIFE_PROCESSING) {
+                closeit = ((byte)(_cur_year - i->last_prod_year) >= 5);
+            }
+        }
+
+    }
 
 	/* Close if needed and allowed */
 	if (closeit && !CheckIndustryCloseDownProtection(i->type)) {
