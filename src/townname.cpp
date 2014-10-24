@@ -1067,3 +1067,17 @@ char *GenerateTownNameString(char *buf, const char *last, size_t lang, uint32 se
 
 	return strecpy(buf, buffer, last);
 }
+
+const char *FetchTownName(const Town *town)
+{
+    char town_name[255];
+    if (town->name == NULL)
+        GetTownName(town_name, town, lastof(town_name));
+    else
+        strncpy(town_name, town->name, sizeof(town_name));
+
+    const char *blah = strdup(town_name);
+
+    return blah;
+}
+

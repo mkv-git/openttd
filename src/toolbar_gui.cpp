@@ -10,6 +10,8 @@
 /** @file toolbar_gui.cpp Code related to the (main) toolbar. */
 
 #include <iostream>
+#include <sstream>
+#include <fstream>
 #include "stdafx.h"
 #include "gui.h"
 #include "window_gui.h"
@@ -48,7 +50,8 @@
 #include "goal_base.h"
 #include "story_base.h"
 #include "town.h"
-
+#include "group.h"
+#include "vehicle_type.h"
 #include "widgets/toolbar_widget.h"
 
 #include "network/network.h"
@@ -74,6 +77,58 @@ enum CallBackFunction {
 	CBF_PLACE_SIGN,
 	CBF_PLACE_LANDINFO,
 };
+
+/* CUSTOM */
+void SaveTownsPreferences()
+{
+    TownList();
+    SaveSignsPreferences();
+    SaveGroupsPreferences();
+}
+
+void LoadTownsFromList()
+{
+    std::ifstream f_obj("city_prefs.dat");
+
+    TownLayout layout;
+    TownSize size;
+    std::string line;
+    std::string buf[6];
+
+    while (std::getline(f_obj, line)) {
+        int pos = 0;
+        int i = 0;
+
+        while (pos != -1){
+            pos = line.find(",");
+            std::string c;
+            c = line.substr(0, pos);
+            line.erase(0, pos+1);
+            buf[i] = c;
+            i++;
+        }
+
+        switch(atoi(buf[2].c_str())) {
+            case 2: layout = TL_2X2_GRID; break;
+            case 3: layout = TL_3X3_GRID; break;
+            default: layout = TL_3X3_GRID;
+        }
+
+        if (atoi(buf[3].c_str()) > 17000) {
+            size = TSZ_MEDIUM;
+        } else {
+            size = TSZ_SMALL;
+        }
+
+
+        BuildTowns(atoi(buf[0].c_str()), size, layout, atoi(buf[4].c_str()), buf[5], false);
+        std::fill_n(buf, 6, 0);
+    }
+
+    f_obj.close();
+}
+/* CUSTOM */
+
 
 /**
  * Drop down list entry for showing a checked/unchecked toggle item.
@@ -383,8 +438,9 @@ enum SaveLoadEditorMenuEntries {
 	SLEME_LOAD_SCENARIO,
 	SLEME_SAVE_HEIGHTMAP,
 	SLEME_LOAD_HEIGHTMAP,
+    SLEME_LOAD_TOWNS,
 	SLEME_EXIT_TOINTRO,
-	SLEME_EXIT_GAME       = 6,
+	SLEME_EXIT_GAME       = 7,
 	SLEME_MENUCOUNT,
 };
 
@@ -393,9 +449,11 @@ enum SaveLoadEditorMenuEntries {
  */
 enum SaveLoadNormalMenuEntries {
 	SLNME_SAVE_GAME   = 0,
+    SLNME_SAVE_PREFERENCES,
 	SLNME_LOAD_GAME,
 	SLNME_EXIT_TOINTRO,
-	SLNME_EXIT_GAME = 4,
+    SLNME_LOAD_SIGN_GROUPS,
+	SLNME_EXIT_GAME = 6,
 	SLNME_MENUCOUNT,
 };
 
@@ -437,14 +495,20 @@ static CallBackFunction MenuClickSaveLoad(int index = 0)
 			case SLEME_LOAD_SCENARIO:  ShowSaveLoadDialog(SLD_LOAD_SCENARIO);  break;
 			case SLEME_SAVE_HEIGHTMAP: ShowSaveLoadDialog(SLD_SAVE_HEIGHTMAP); break;
 			case SLEME_LOAD_HEIGHTMAP: ShowSaveLoadDialog(SLD_LOAD_HEIGHTMAP); break;
+            case SLEME_LOAD_TOWNS:     break;
 			case SLEME_EXIT_TOINTRO:   AskExitToGameMenu();                    break;
 			case SLEME_EXIT_GAME:      HandleExitGameRequest();                break;
 		}
 	} else {
 		switch (index) {
 			case SLNME_SAVE_GAME:      ShowSaveLoadDialog(SLD_SAVE_GAME); break;
+            case SLNME_SAVE_PREFERENCES: SaveTownsPreferences(); break;
 			case SLNME_LOAD_GAME:      ShowSaveLoadDialog(SLD_LOAD_GAME); break;
 			case SLNME_EXIT_TOINTRO:   AskExitToGameMenu();               break;
+            case SLNME_LOAD_SIGN_GROUPS:
+                LoadGroupsPreferences();
+                LoadSignsPreferences();
+                break;
 			case SLNME_EXIT_GAME:      HandleExitGameRequest();           break;
 		}
 	}

@@ -9,6 +9,8 @@
 
 /** @file signs_cmd.cpp Handling of sign related commands. */
 
+#include <iostream>
+#include <fstream>
 #include "stdafx.h"
 #include "landscape.h"
 #include "company_func.h"
@@ -131,3 +133,35 @@ void PlaceProc_Sign(TileIndex tile)
 {
 	DoCommandP(tile, 0, 0, CMD_PLACE_SIGN | CMD_MSG(STR_ERROR_CAN_T_PLACE_SIGN_HERE), CcPlaceSign);
 }
+
+void LoadSignsPreferences() {
+    std::string line;
+    std::string s_buf[3];
+    std::ifstream sf_obj("signs_prefs.dat");
+
+    while (std::getline(sf_obj, line)) {
+        std::cout << line << std::endl;
+        int pos = 0;
+        int i = 0;
+
+        while (pos != -1){
+            pos = line.find(",");
+            std::string c;
+            c = line.substr(0, pos);
+            line.erase(0, pos+1);
+            s_buf[i] = c;
+            i++;
+        }
+
+        const char *name = s_buf[2].c_str();
+        Sign *si = new Sign(_current_company);
+        si->x = atoi(s_buf[0].c_str());
+        si->y = atoi(s_buf[1].c_str());
+        si->name = strdup(name);
+        si->UpdateVirtCoord();
+    }
+
+
+    sf_obj.close();
+}
+

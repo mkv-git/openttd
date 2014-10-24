@@ -11,6 +11,10 @@
 
 #include "stdafx.h"
 #include "debug.h"
+#include <sstream>
+#include <string>
+#include <iostream>
+#include <algorithm>
 #include "cmd_helper.h"
 #include "command_func.h"
 #include "company_func.h"
@@ -27,6 +31,8 @@
 #include "waypoint_base.h"
 #include "company_base.h"
 #include "order_backup.h"
+#include "town.h"
+#include "townname_func.h"
 
 #include "table/strings.h"
 
@@ -40,6 +46,166 @@ OrderPool _order_pool("Order");
 INSTANTIATE_POOL_METHODS(Order)
 OrderListPool _orderlist_pool("OrderList");
 INSTANTIATE_POOL_METHODS(OrderList)
+
+std::string GenerateVehicleName(Vehicle *current_vehicle, const std::string name)
+{
+    size_t array_size = 0;
+    u_int queue_numbers[255];
+    const Vehicle *vehicle;
+    const int name_len = name.length();
+    std::string new_vehicle_name = name;
+    current_vehicle->name = "just_some_random_name";
+    char temp_buffer[name_len + 1];
+    int name_len_diff;
+    bool is_first_vehicle_found = false;
+
+    FOR_ALL_VEHICLES(vehicle) {
+        //if (!(vehicle->type == VEH_TRAIN || vehicle->type == VEH_SHIP || vehicle->type == VEH_AIRCRAFT)) {
+        //    continue;
+        //}
+
+        if (vehicle->name == NULL) {
+            continue;
+        }
+
+        const int search_name_len = strlen(vehicle->name);
+        name_len_diff = search_name_len - name_len;
+
+        if (name_len_diff > 2 || name_len_diff < -2) {
+            continue;
+        }
+
+        memset(&temp_buffer[0], 0, sizeof(temp_buffer));
+        strncpy(temp_buffer, vehicle->name, name_len);
+        if (strcmp(name.c_str(), temp_buffer) != 0) {
+            continue;
+        }
+
+        if (search_name_len == name_len){
+            is_first_vehicle_found = true;
+            queue_numbers[array_size++] = 0;
+            continue;
+        }
+
+        // extract line number if there are multiple vehicles
+        std::string name_appendix(vehicle->name, search_name_len-1, name_len_diff);
+        bool is_int (!name_appendix.empty() && name_appendix.find_first_not_of("0123456789") == std::string::npos);
+
+        if (!is_int) {
+            continue;
+        }
+
+        queue_numbers[array_size++] = atoi(name_appendix.c_str());
+    }
+
+    if (array_size == 0) {
+        return new_vehicle_name;
+    }
+
+    if ((array_size > 0) && (!is_first_vehicle_found)) {
+        return new_vehicle_name;
+    }
+    std::sort(queue_numbers, queue_numbers + array_size);
+    u_int first_number = 1;
+    for (size_t i=0; i < array_size; i++) {
+
+        if (queue_numbers[i] == first_number) {
+            first_number++;
+        } else if (queue_numbers[i] > first_number) {
+            break;
+        }
+    }
+
+    char buf[8];
+    sprintf(buf, " %u", first_number);
+    new_vehicle_name += buf;
+
+    return new_vehicle_name;
+}
+
+void BuildVehicleName(Vehicle *vehicle)
+{
+
+    const char *missing_name = "Change me";
+    const Order *vehicle_order;
+    int destination_id;
+
+    const Station *dest_st;
+    std::stringstream new_vehicle_name;
+
+    if (vehicle->type == VEH_ROAD) {
+        FOR_VEHICLE_ORDERS(vehicle, vehicle_order) {
+            if (vehicle_order->GetType() != OT_GOTO_STATION){
+                continue;
+            }
+
+            destination_id = vehicle_order->GetDestination();
+            dest_st = Station::GetIfValid(destination_id);
+            if (dest_st == NULL){
+                continue;
+            }
+
+            const char *order_town_name = FetchTownName(dest_st->town);
+            new_vehicle_name << order_town_name;
+            break;
+        }
+        std::string generated_name = GenerateVehicleName(vehicle, new_vehicle_name.str());
+        vehicle->name = strdup(generated_name.c_str());
+        return;
+    }
+
+    FOR_VEHICLE_ORDERS(vehicle, vehicle_order) {
+
+        if (vehicle_order->GetType() != OT_GOTO_STATION){
+            continue;
+        }
+
+        destination_id = vehicle_order->GetDestination();
+        dest_st = Station::GetIfValid(destination_id);
+        if (dest_st == NULL){
+            continue;
+        }
+
+        const char *order_town_name = FetchTownName(dest_st->town);
+        new_vehicle_name << (new_vehicle_name.rdbuf()->in_avail() == 0?"":"-") << order_town_name;
+    }
+
+    if (new_vehicle_name.rdbuf()->in_avail() == 0){
+        switch(vehicle->type) {
+            case VEH_TRAIN: new_vehicle_name << "Dummy train"; break;
+            default: new_vehicle_name << "Change me";
+        }
+    }
+
+    std::string generated_name = GenerateVehicleName(vehicle, new_vehicle_name.str());
+
+    vehicle->name = strdup(generated_name.c_str());
+}
+
+void RebuildVehicleNamesOnTownRename(const Town *town)
+{
+    Vehicle *vehicle;
+    const Order *order;
+    const Station *dest_st;
+
+    FOR_ALL_VEHICLES(vehicle) {
+        if (!(vehicle->type == VEH_TRAIN || vehicle->type == VEH_SHIP || vehicle->type == VEH_AIRCRAFT))
+            continue;
+
+        FOR_VEHICLE_ORDERS(vehicle, order) {
+            dest_st = Station::GetIfValid(order->GetDestination());
+            if (dest_st == NULL)
+                continue;
+
+            if (dest_st->town == town){
+                BuildVehicleName(vehicle);
+                InvalidateWindowClassesData(GetWindowClassForVehicleType(vehicle->type), 0);
+                break;
+            }
+        }
+    }
+
+}
 
 /** Clean everything up. */
 Order::~Order()
@@ -928,6 +1094,9 @@ CommandCost CmdInsertOrder(TileIndex tile, DoCommandFlag flags, uint32 p1, uint3
 		InsertOrder(v, new_o, sel_ord);
 	}
 
+    if (new_order.GetType() == OT_GOTO_STATION){
+        BuildVehicleName(v);
+    }
 	return CommandCost();
 }
 
@@ -1042,6 +1211,10 @@ CommandCost CmdDeleteOrder(TileIndex tile, DoCommandFlag flags, uint32 p1, uint3
 	if (v->GetOrder(sel_ord) == NULL) return CMD_ERROR;
 
 	if (flags & DC_EXEC) DeleteOrder(v, sel_ord);
+    if (v->type == VEH_TRAIN || v->type == VEH_SHIP || v->type == VEH_AIRCRAFT) {
+        BuildVehicleName(v);
+    }
+
 	return CommandCost();
 }
 
@@ -1255,6 +1428,9 @@ CommandCost CmdMoveOrder(TileIndex tile, DoCommandFlag flags, uint32 p1, uint32 
 
 		/* Make sure to rebuild the whole list */
 		InvalidateWindowClassesData(GetWindowClassForVehicleType(v->type), 0);
+        if (v->type == VEH_TRAIN || v->type == VEH_SHIP || v->type == VEH_AIRCRAFT) {
+            BuildVehicleName(v);
+        }
 	}
 
 	return CommandCost();

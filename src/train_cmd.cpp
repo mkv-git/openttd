@@ -2839,6 +2839,16 @@ static void TrainEnterStation(Train *v, StationID station)
 
 	TriggerStationRandomisation(st, v->tile, SRT_TRAIN_ARRIVES);
 	TriggerStationAnimation(st, v->tile, SAT_TRAIN_ARRIVES);
+
+    /* Check train's length vs station length  */
+    const int station_length = st->GetPlatformLength(v->tile) * TILE_SIZE;
+    const int train_total_length = v->gcache.cached_total_length;
+    if (train_total_length > station_length) {
+        SetDParam(0, v->index);
+        SetDParam(1, st->index);
+        AddVehicleAdviceNewsItem(STR_VEHICLE_LONGER_THAN_STATION, v->index);
+    }
+
 }
 
 /* Check if the vehicle is compatible with the specified tile */

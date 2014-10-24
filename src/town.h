@@ -19,6 +19,7 @@
 #include "cargotype.h"
 #include "tilematrix_type.hpp"
 #include <list>
+#include <string>
 
 template <typename T>
 struct BuildingCounts {
@@ -50,6 +51,16 @@ struct TownCache {
 	uint32 squared_town_zone_radius[HZB_END]; ///< UpdateTownRadius updates this given the house count
 	BuildingCounts<uint16> building_counts;   ///< The number of each type of building in the town
 };
+
+struct town_struct {
+    int tile;
+    int is_city;
+    int layout;
+    int size;
+    std::string name;
+    uint32 original_name;
+};
+
 
 /** Town data structure. */
 struct Town : TownPool::PoolItem<&_town_pool> {
@@ -194,7 +205,8 @@ void SetTownRatingTestMode(bool mode);
 uint GetMaskOfTownActions(int *nump, CompanyID cid, const Town *t);
 bool GenerateTowns(TownLayout layout);
 const CargoSpec *FindFirstCargoWithTownEffect(TownEffect effect);
-
+bool BuildTowns(TileIndex tile, TownSize size, TownLayout layout, uint32 townnameparts, std::string town_name, bool city);
+void TownList();
 
 /** Town actions of a company. */
 enum TownActions {

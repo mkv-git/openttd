@@ -10,6 +10,8 @@
 /** @file town_cmd.cpp Handling of town tiles. */
 
 #include "stdafx.h"
+#include <string>
+#include <iostream>
 #include <algorithm>
 #include "road_internal.h" /* Cleaning up road bits */
 #include "road_cmd.h"
@@ -47,6 +49,7 @@
 #include "object_base.h"
 #include "ai/ai.hpp"
 #include "game/game.hpp"
+#include "order_func.h"
 
 #include "table/strings.h"
 #include "table/town_land.h"
@@ -2463,6 +2466,7 @@ CommandCost CmdRenameTown(TileIndex tile, DoCommandFlag flags, uint32 p1, uint32
 		t->UpdateVirtCoord();
 		InvalidateWindowData(WC_TOWN_DIRECTORY, 0, 1);
 		UpdateAllStationVirtCoords();
+        RebuildVehicleNamesOnTownRename(t);
 	}
 	return CommandCost();
 }
@@ -3450,3 +3454,50 @@ void ResetHouses()
 	/* Reset any overrides that have been set. */
 	_house_mngr.ResetOverride();
 }
+
+bool BuildTowns(TileIndex tile, TownSize size, TownLayout layout, uint32 townnameparts, std::string town_name, bool city)
+{
+
+    if (tile == 0 || !tile)
+        return false;
+
+    assert(_game_mode == GM_EDITOR || _generating_world); // These are the preconditions for CMD_DELETE_TOWN
+    const char *c_town_name = town_name.c_str();
+
+    if (!Town::CanAllocateItem()) return NULL;
+        /* Generate a tile index not too close from the edge */
+
+        /* if we tried to place the town on water, slide it over onto
+         * the nearest likely-looking spot */
+        if (IsTileType(tile, MP_WATER)) {
+            tile = FindNearestGoodCoastalTownSpot(tile, layout);
+            if (tile == INVALID_TILE){
+                std::cout << "invalid tile" << std::endl;
+                return false;
+            }
+        }
+
+        /* Make sure town can be placed here */
+        if (TownCanBePlacedHere(tile).Failed()) {
+            std::cout << "town cannot be placed here" << std::endl;
+            return false;
+        }
+
+        /* Allocate a town struct */
+        Town *t = new Town(tile);
+
+        DoCreateTown(t, tile, townnameparts, size, city, layout, false);
+        if (t != NULL && !StrEmpty(town_name.c_str())) {
+            free(t->name);
+            t->name = strdup(c_town_name);
+            t->UpdateVirtCoord();
+        }
+
+        /* We already know that we can allocate a single town when
+         * entering this function. However, we create and delete
+         * a town which "resets" the allocation checks. As such we
+         * need to check again when assertions are enabled. */
+        assert(Town::CanAllocateItem());
+    return true;
+}
+

@@ -10,6 +10,9 @@
 /** @file town_gui.cpp GUI for towns. */
 
 #include "stdafx.h"
+#include <fstream>
+#include <string>
+#include <iostream>
 #include "town.h"
 #include "viewport_func.h"
 #include "error.h"
@@ -627,6 +630,25 @@ static const NWidgetPart _nested_town_directory_widgets[] = {
 		EndContainer(),
 	EndContainer(),
 };
+
+void TownList()
+{
+    const Town *t;
+    std::ofstream f_obj("city_prefs.dat");
+
+    int i = 0;
+    char buffer[255];
+    FOR_ALL_TOWNS(t) {
+
+        sprintf(buffer, "%d,%d,%d,%d,%d,%s\n", t->xy, t->larger_town, int(t->layout), t->cache.population, t->townnameparts, (t->name?t->name:""));
+        std::cout << buffer << std::endl;
+        f_obj << buffer;
+        i++;
+    }
+
+
+    f_obj.close();
+}
 
 /** Town directory window class. */
 struct TownDirectoryWindow : public Window {

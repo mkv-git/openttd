@@ -9,6 +9,8 @@
 
 /** @file signs.cpp Handling of signs. */
 
+#include <iostream>
+#include <fstream>
 #include "stdafx.h"
 #include "landscape.h"
 #include "signs_base.h"
@@ -59,3 +61,16 @@ void UpdateAllSignVirtCoords()
 		si->UpdateVirtCoord();
 	}
 }
+
+void SaveSignsPreferences()
+{
+    Sign *si;
+    char buffer[255];
+    std::ofstream f_obj("signs_prefs.dat");
+    FOR_ALL_SIGNS(si) {
+        sprintf(buffer, "%d,%d,%s\n", si->x, si->y, si->name);
+        f_obj << buffer;
+    }
+    f_obj.close();
+}
+

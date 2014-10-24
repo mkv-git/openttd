@@ -25,6 +25,8 @@ void PlaceProc_Sign(TileIndex tile);
 void ShowRenameSignWindow(const Sign *si);
 void HandleClickOnSign(const Sign *si);
 void DeleteRenameSignWindow(SignID sign);
+void SaveSignsPreferences();
+void LoadSignsPreferences();
 
 Window *ShowSignList();
 
