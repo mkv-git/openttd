@@ -39,6 +39,33 @@ static int CDECL EngineNumberSorter(const EngineID *a, const EngineID *b)
 	return r;
 }
 
+static int CDECL EngineNameSorter(const EngineID *a, const EngineID *b)
+{
+    static EngineID last_engine[2] = { INVALID_ENGINE, INVALID_ENGINE };
+    static char     last_name[2][64] = { "\0", "\0" };
+
+    const EngineID va = *a;
+    const EngineID vb = *b;
+
+    if (va != last_engine[0]) {
+        last_engine[0] = va;
+        SetDParam(0, va);
+        GetString(last_name[0], STR_ENGINE_NAME, lastof(last_name[0]));
+    }
+
+    if (vb != last_engine[1]) {
+        last_engine[1] = vb;
+        SetDParam(0, vb);
+        GetString(last_name[1], STR_ENGINE_NAME, lastof(last_name[1]));
+    }
+
+    int r = strnatcmp(last_name[0], last_name[1]); // Sort by name (natural sorting).
+
+    /* Use EngineID to sort instead since we want consistent sorting */
+    if (r == 0) return EngineNumberSorter(a, b);
+    return _internal_sort_order ? -r : r;
+}
+
 /**
  * Rebuild the left autoreplace list if an engine is removed or added
  * @param e Engine to check if it is removed or added
@@ -101,10 +128,13 @@ class ReplaceVehicleWindow : public Window {
 		/* Ensure that the wagon/engine selection fits the engine. */
 		if ((rvi->railveh_type == RAILVEH_WAGON) == show_engines) return false;
 
-		if (draw_left && show_engines) {
-			/* Ensure that the railtype is specific to the selected one */
-			if (rvi->railtype != this->sel_railtype) return false;
-		}
+        //MAX: comment out this check, it seems that it causes sometimes
+        // no to be able to autoreplace engines
+
+		//if (draw_left && show_engines) {
+		//	/* Ensure that the railtype is specific to the selected one */
+		//	if (rvi->railtype != this->sel_railtype) return false;
+		//}
 		return true;
 	}
 
@@ -140,7 +170,11 @@ class ReplaceVehicleWindow : public Window {
 			if (eid == this->sel_engine[side]) selected_engine = eid; // The selected engine is still in the list
 		}
 		this->sel_engine[side] = selected_engine; // update which engine we selected (the same or none, if it's not in the list anymore)
-		EngList_Sort(list, &EngineNumberSorter);
+        if (type == VEH_SHIP) {
+            EngList_Sort(list, &EngineNameSorter);
+        } else {
+            EngList_Sort(list, &EngineNumberSorter);
+        }
 	}
 
 	/** Generate the lists */
