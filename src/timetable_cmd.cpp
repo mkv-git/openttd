@@ -274,7 +274,7 @@ CommandCost CmdSetTimetableStart(TileIndex tile, DoCommandFlag flags, uint32 p1,
 			w->lateness_counter = 0;
 			ClrBit(w->vehicle_flags, VF_TIMETABLE_STARTED);
 			/* Do multiplication, then division to reduce rounding errors. */
-			w->timetable_start = start_date + idx * total_duration / num_vehs / DAY_TICKS;
+			w->timetable_start = start_date + idx * total_duration / num_vehs / HOUR_TICKS;
 			SetWindowDirty(WC_VEHICLE_TIMETABLE, w->index);
 		}
 
@@ -368,7 +368,7 @@ void UpdateVehicleTimetable(Vehicle *v, bool travelling)
 		just_started = !HasBit(v->vehicle_flags, VF_TIMETABLE_STARTED);
 
 		if (v->timetable_start != 0) {
-			v->lateness_counter = (_date - v->timetable_start) * DAY_TICKS + _date_fract;
+			v->lateness_counter = (_date - v->timetable_start) * HOUR_TICKS + _date_fract;
 			v->timetable_start = 0;
 		}
 
@@ -398,7 +398,7 @@ void UpdateVehicleTimetable(Vehicle *v, bool travelling)
 			 * the timetable entry like is done for road vehicles/ships.
 			 * Thus always make sure at least one tick is used between the
 			 * processing of different orders when filling the timetable. */
-			time_taken = CeilDiv(max(time_taken, 1U), DAY_TICKS) * DAY_TICKS;
+			time_taken = CeilDiv(max(time_taken, 1U), HOUR_TICKS) * HOUR_TICKS;
 
 			ChangeTimetable(v, v->cur_real_order_index, time_taken, travelling ? MTF_TRAVEL_TIME : MTF_WAIT_TIME);
 		}

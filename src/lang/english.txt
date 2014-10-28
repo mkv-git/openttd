@@ -2957,6 +2957,7 @@ STR_TOWN_POPULATION                                             :{BLACK}World po
 # Town view window
 STR_TOWN_VIEW_TOWN_CAPTION                                      :{WHITE}{TOWN}
 STR_TOWN_VIEW_CITY_CAPTION                                      :{WHITE}{TOWN} (City)
+STR_TOWN_VIEW_RATING                                            :{BLACK}Rating: {NUM}
 STR_TOWN_VIEW_POPULATION_HOUSES                                 :{BLACK}Population: {ORANGE}{COMMA}{BLACK}  Houses: {ORANGE}{COMMA}
 STR_TOWN_VIEW_PASSENGERS_LAST_MONTH_MAX                         :{BLACK}Passengers last month: {ORANGE}{COMMA}{BLACK}  max: {ORANGE}{COMMA}
 STR_TOWN_VIEW_MAIL_LAST_MONTH_MAX                               :{BLACK}Mail last month: {ORANGE}{COMMA}{BLACK}  max: {ORANGE}{COMMA}
@@ -3856,9 +3857,10 @@ STR_INVALID_ORDER                                               :{RED} (Invalid 
 STR_ORDER_REVIEWS_MENU_TITLE                                    :Order reviews
 STR_ORDER_REVIEWS_TITLE                                         :{WHITE}Order reviews
 
-STR_ORDERS_REVIEW_DELAY                                         :{WHITE}Remove {RAW_STRING} "delay" orders ({NUM})
-STR_ORDERS_REVIEW_FULL_LOAD                                     :{WHITE}Remove {RAW_STRING} "full load" orders ({NUM})
-STR_ORDERS_REVIEW_PARTIAL_LOAD                                  :{WHITE}Remove {RAW_STRING} "partial load" orders ({NUM})
+STR_ORDERS_REVIEW_DELAY                                         :{BLACK}Remove {RAW_STRING} "delay" orders - {NUM}
+STR_ORDERS_REVIEW_FULL_LOAD                                     :{BLACK}Remove {RAW_STRING} "full load" orders - {NUM}
+STR_ORDERS_REVIEW_PARTIAL_LOAD                                  :{BLACK}Remove {RAW_STRING} "partial load" orders - {NUM}
+STR_ORDERS_REVIEW_TRANSFER                                      :{BLACK}Remove {RAW_STRING} "transfer" orders - {NUM}
 STR_ORDERS_REMOVE                                               :Remove
 STR_ORDERS_REMOVE_ALL                                           :Remove all
 
@@ -3877,7 +3879,7 @@ STR_TIMETABLE_TRAVEL_FOR                                        :Travel for {STR
 STR_TIMETABLE_TRAVEL_FOR_SPEED                                  :Travel for {STRING1} with at most {VELOCITY}
 STR_TIMETABLE_STAY_FOR                                          :and stay for {STRING1}
 STR_TIMETABLE_AND_TRAVEL_FOR                                    :and travel for {STRING1}
-STR_TIMETABLE_DAYS                                              :{COMMA}{NBSP}day{P "" s}
+STR_TIMETABLE_HOURS                                             :{COMMA}{NBSP}hour{P "" s}
 STR_TIMETABLE_TICKS                                             :{COMMA}{NBSP}tick{P "" s}
 
 STR_TIMETABLE_TOTAL_TIME                                        :{BLACK}This timetable will take {STRING1} to complete

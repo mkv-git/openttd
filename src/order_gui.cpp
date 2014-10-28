@@ -1763,23 +1763,28 @@ struct OrdersReviewWindow : Window
             OR_DELAY,
             OR_FULL_LOAD,
             OR_PARTIAL_LOAD,
+            OR_TRANSFER,
         };
-        int vehicle_order_cnt [4][3];
+        int vehicle_order_cnt [4][4];
 
         void LoadVehicleOrders()
         {
 
             // reset counters
             for (int i=0; i<4; i++)
-                for (int j=0; j<3; j++)
+                for (int j=0; j<4; j++)
                     vehicle_order_cnt[i][j] = 0;
 
             const Vehicle *vehicle;
+            bool is_transfer = false;
             FOR_ALL_VEHICLES(vehicle) {
                 const Order *order;
+                int already_mapped[] = {0, 0, 0, 0};
+
                 FOR_VEHICLE_ORDERS(vehicle, order) {
-                    int order_type = -1;
+                    int order_type = -1;                    
                     OrderLoadFlags load = order->GetLoadType();
+                    is_transfer = order->GetUnloadType() == OUFB_TRANSFER;
                     bool has_partial_load = order->partial_load_percentage && order->partial_load_percentage != 100;
                     if ((load & OLFB_FULL_LOAD || load & OLF_FULL_LOAD_ANY) && !has_partial_load)
                         order_type = OR_FULL_LOAD;
@@ -1787,13 +1792,19 @@ struct OrdersReviewWindow : Window
                         order_type = OR_PARTIAL_LOAD;
                     if (order->wait_time)
                         order_type = OR_DELAY;
-    
+                    if (is_transfer)
+                        order_type = OR_TRANSFER;
+
                     if (order_type == -1)
                         continue;
                     if (vehicle->type > VEH_AIRCRAFT)
                         continue;
 
+
+                    if (already_mapped[order_type] != 0)
+                        continue;
                     vehicle_order_cnt[vehicle->type][order_type]++;
+                    already_mapped[order_type] = 1;
                 }               
             }
 
@@ -1812,6 +1823,7 @@ struct OrdersReviewWindow : Window
                     OrderLoadFlags load = order->GetLoadType();
 
                     bool has_partial_load = order->partial_load_percentage && order->partial_load_percentage != 100;
+                    bool is_transfer = order->GetUnloadType() == OUFB_TRANSFER;
                     if ((load & OLFB_FULL_LOAD || load & OLF_FULL_LOAD_ANY) && !has_partial_load)
                         order_type = OR_FULL_LOAD;
                     else if ((load & OLFB_FULL_LOAD || load & OLF_FULL_LOAD_ANY) && has_partial_load)
@@ -1819,6 +1831,10 @@ struct OrdersReviewWindow : Window
                     if (order->wait_time)
                         order_type = OR_DELAY;
                 
+                    if (is_transfer)
+                        order_type = OR_TRANSFER;
+                        
+
                     if (order_type != load_type)
                         continue;                   
             
@@ -1831,6 +1847,10 @@ struct OrdersReviewWindow : Window
                             break;
                         case OR_PARTIAL_LOAD:
                             order->partial_load_percentage = 100;
+                            order->SetLoadType(OLF_LOAD_IF_POSSIBLE);
+                            break;
+                        case OR_TRANSFER:
+                            order->SetUnloadType(OUF_UNLOAD_IF_POSSIBLE);
                             order->SetLoadType(OLF_LOAD_IF_POSSIBLE);
                             break;
                     }
@@ -1871,6 +1891,9 @@ struct OrdersReviewWindow : Window
             case WID_OR_AIR_PARTIAL_LOAD:
                 this->RemoveVehicleOrders(VEH_AIRCRAFT, OR_PARTIAL_LOAD); 
                 break;
+            case WID_OR_AIR_TRANSFER:
+                this->RemoveVehicleOrders(VEH_AIRCRAFT, OR_TRANSFER);
+                break;
             case WID_OR_ROAD_DELAY:
                 this->RemoveVehicleOrders(VEH_ROAD, OR_DELAY); 
                 break;
@@ -1879,6 +1902,9 @@ struct OrdersReviewWindow : Window
                 break;
             case WID_OR_ROAD_PARTIAL_LOAD:
                 this->RemoveVehicleOrders(VEH_ROAD, OR_PARTIAL_LOAD); 
+                break;
+            case WID_OR_ROAD_TRANSFER:
+                this->RemoveVehicleOrders(VEH_ROAD, OR_TRANSFER);
                 break;
             case WID_OR_SHIP_DELAY:
                 this->RemoveVehicleOrders(VEH_SHIP, OR_DELAY); 
@@ -1889,6 +1915,9 @@ struct OrdersReviewWindow : Window
             case WID_OR_SHIP_PARTIAL_LOAD:
                 this->RemoveVehicleOrders(VEH_SHIP, OR_PARTIAL_LOAD); 
                 break;
+            case WID_OR_SHIP_TRANSFER:
+                this->RemoveVehicleOrders(VEH_SHIP, OR_TRANSFER);
+                break;
             case WID_OR_TRAIN_DELAY:
                 this->RemoveVehicleOrders(VEH_TRAIN, OR_DELAY); 
                 break;
@@ -1897,6 +1926,9 @@ struct OrdersReviewWindow : Window
                 break;
             case WID_OR_TRAIN_PARTIAL_LOAD:
                 this->RemoveVehicleOrders(VEH_TRAIN, OR_PARTIAL_LOAD); 
+                break;
+            case WID_OR_TRAIN_TRANSFER:
+                this->RemoveVehicleOrders(VEH_TRAIN, OR_TRANSFER);
                 break;
         }
         this->InvalidateData();
@@ -1917,6 +1949,10 @@ struct OrdersReviewWindow : Window
                 SetDParamStr(0, "airplane");
                 SetDParam(1, this->vehicle_order_cnt[VEH_AIRCRAFT][OR_PARTIAL_LOAD]);
                 break;
+            case WID_OR_AIR_TRANSFER:
+                SetDParamStr(0, "airplane");
+                SetDParam(1, this->vehicle_order_cnt[VEH_AIRCRAFT][OR_TRANSFER]);
+                break;
 
             case WID_OR_ROAD_DELAY:
                 SetDParamStr(0, "road vehicle");
@@ -1930,37 +1966,44 @@ struct OrdersReviewWindow : Window
                 SetDParamStr(0, "road vehicle");
                 SetDParam(1, this->vehicle_order_cnt[VEH_ROAD][OR_PARTIAL_LOAD]);
                 break;
+            case WID_OR_ROAD_TRANSFER:
+                SetDParamStr(0, "road vehicle");
+                SetDParam(1, this->vehicle_order_cnt[VEH_ROAD][OR_TRANSFER]);
+                break;
 
             case WID_OR_SHIP_DELAY:
                 SetDParamStr(0, "ship");
                 SetDParam(1, this->vehicle_order_cnt[VEH_SHIP][OR_DELAY]);
                 break;
-
             case WID_OR_SHIP_FULL_LOAD:
                 SetDParamStr(0, "ship");
                 SetDParam(1, this->vehicle_order_cnt[VEH_SHIP][OR_FULL_LOAD]);
                 break;
-
             case WID_OR_SHIP_PARTIAL_LOAD:
                 SetDParamStr(0, "ship");
                 SetDParam(1, this->vehicle_order_cnt[VEH_SHIP][OR_PARTIAL_LOAD]);
                 break;
-
-            case WID_OR_TRAIN_DELAY:
-                SetDParamStr(0, "trains");
-                SetDParam(1, this->vehicle_order_cnt[VEH_TRAIN][OR_DELAY]);
+            case WID_OR_SHIP_TRANSFER:
+                SetDParamStr(0, "ship");
+                SetDParam(1, this->vehicle_order_cnt[VEH_SHIP][OR_TRANSFER]);
                 break;
 
+            case WID_OR_TRAIN_DELAY:
+                SetDParamStr(0, "train");
+                SetDParam(1, this->vehicle_order_cnt[VEH_TRAIN][OR_DELAY]);
+                break;
             case WID_OR_TRAIN_FULL_LOAD:
                 SetDParamStr(0, "train");
                 SetDParam(1, this->vehicle_order_cnt[VEH_TRAIN][OR_FULL_LOAD]);
                 break;
-
             case WID_OR_TRAIN_PARTIAL_LOAD:
                 SetDParamStr(0, "train");
                 SetDParam(1, this->vehicle_order_cnt[VEH_TRAIN][OR_PARTIAL_LOAD]);
                 break;
-
+            case WID_OR_TRAIN_TRANSFER:
+                SetDParamStr(0, "train");
+                SetDParam(1, this->vehicle_order_cnt[VEH_TRAIN][OR_TRANSFER]);
+                break;
         }
     }
 
@@ -1983,6 +2026,8 @@ static const NWidgetPart _orders_review_widgets[] = {
                 SetDataTip(STR_ORDERS_REVIEW_FULL_LOAD, STR_NULL),
         NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_AIR_PARTIAL_LOAD),
                 SetDataTip(STR_ORDERS_REVIEW_PARTIAL_LOAD, STR_NULL),
+        NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_AIR_TRANSFER),
+                SetDataTip(STR_ORDERS_REVIEW_TRANSFER, STR_NULL),
 
         NWidget(NWID_SPACER), SetMinimalSize(0, 5),
         NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_ROAD_DELAY),
@@ -1991,6 +2036,8 @@ static const NWidgetPart _orders_review_widgets[] = {
                 SetDataTip(STR_ORDERS_REVIEW_FULL_LOAD, STR_NULL),
         NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_ROAD_PARTIAL_LOAD),
                 SetDataTip(STR_ORDERS_REVIEW_PARTIAL_LOAD, STR_NULL),
+        NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_ROAD_TRANSFER),
+                SetDataTip(STR_ORDERS_REVIEW_TRANSFER, STR_NULL),
 
         NWidget(NWID_SPACER), SetMinimalSize(0, 5),
         NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_SHIP_DELAY),
@@ -1999,6 +2046,8 @@ static const NWidgetPart _orders_review_widgets[] = {
                 SetDataTip(STR_ORDERS_REVIEW_FULL_LOAD, STR_NULL),
         NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_SHIP_PARTIAL_LOAD),
                 SetDataTip(STR_ORDERS_REVIEW_PARTIAL_LOAD, STR_NULL),
+        NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_SHIP_TRANSFER),
+                SetDataTip(STR_ORDERS_REVIEW_TRANSFER, STR_NULL),
 
         NWidget(NWID_SPACER), SetMinimalSize(0, 5),
         NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_TRAIN_DELAY),
@@ -2007,6 +2056,8 @@ static const NWidgetPart _orders_review_widgets[] = {
                 SetDataTip(STR_ORDERS_REVIEW_FULL_LOAD, STR_NULL),
         NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_TRAIN_PARTIAL_LOAD),
             SetDataTip(STR_ORDERS_REVIEW_PARTIAL_LOAD, STR_NULL),
+        NWidget(WWT_PUSHTXTBTN, COLOUR_GREY, WID_OR_TRAIN_TRANSFER),
+                SetDataTip(STR_ORDERS_REVIEW_TRANSFER, STR_NULL),
 
         NWidget(NWID_SPACER), SetMinimalSize(0, 2),
     EndContainer(), // panel

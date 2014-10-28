@@ -48,8 +48,8 @@ void SetTimetableParams(int param1, int param2, Ticks ticks)
 		SetDParam(param1, STR_TIMETABLE_TICKS);
 		SetDParam(param2, ticks);
 	} else {
-		SetDParam(param1, STR_TIMETABLE_DAYS);
-		SetDParam(param2, ticks / DAY_TICKS);
+		SetDParam(param1, STR_TIMETABLE_HOURS);
+		SetDParam(param2, ticks / HOUR_TICKS);
 	}
 }
 
@@ -418,7 +418,7 @@ struct TimetableWindow : Window {
 
 				int y = r.top + WD_FRAMERECT_TOP;
 
-				bool show_late = this->show_expected && v->lateness_counter > DAY_TICKS;
+				bool show_late = this->show_expected && v->lateness_counter > HOUR_TICKS;
 				Ticks offset = show_late ? 0 : -v->lateness_counter;
 
 				bool rtl = _current_text_dir == TD_RTL;
@@ -476,7 +476,7 @@ struct TimetableWindow : Window {
 					/* We aren't running on a timetable yet, so how can we be "on time"
 					 * when we aren't even "on service"/"on duty"? */
 					DrawString(r.left + WD_FRAMERECT_LEFT, r.right - WD_FRAMERECT_RIGHT, y, STR_TIMETABLE_STATUS_NOT_STARTED);
-				} else if (v->lateness_counter == 0 || (!_settings_client.gui.timetable_in_ticks && v->lateness_counter / DAY_TICKS == 0)) {
+				} else if (v->lateness_counter == 0 || (!_settings_client.gui.timetable_in_ticks && v->lateness_counter / HOUR_TICKS == 0)) {
 					DrawString(r.left + WD_FRAMERECT_LEFT, r.right - WD_FRAMERECT_RIGHT, y, STR_TIMETABLE_STATUS_ON_TIME);
 				} else {
 					SetTimetableParams(0, 1, abs(v->lateness_counter));
@@ -529,7 +529,7 @@ struct TimetableWindow : Window {
 
 				if (order != NULL) {
 					uint time = (selected % 2 == 1) ? order->travel_time : order->wait_time;
-					if (!_settings_client.gui.timetable_in_ticks) time /= DAY_TICKS;
+					if (!_settings_client.gui.timetable_in_ticks) time /= HOUR_TICKS;
 
 					if (time != 0) {
 						SetDParam(0, time);
@@ -610,7 +610,7 @@ struct TimetableWindow : Window {
 		if (this->query_is_speed_query) {
 			val = ConvertDisplaySpeedToKmhishSpeed(val);
 		} else {
-			if (!_settings_client.gui.timetable_in_ticks) val *= DAY_TICKS;
+			if (!_settings_client.gui.timetable_in_ticks) val *= HOUR_TICKS;
 		}
 
 		uint32 p2 = minu(val, UINT16_MAX);

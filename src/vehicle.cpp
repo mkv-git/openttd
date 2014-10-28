@@ -2602,7 +2602,7 @@ void VehiclesYearlyLoop()
 
 void VehiclesQuarterlyLoop()
 {
-    if (_cur_quarter == 4)
+    if (_cur_quarter == 0)
         return;
 
 	Vehicle *v;
