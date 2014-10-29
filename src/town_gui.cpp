@@ -644,7 +644,7 @@ void TownList()
     char buffer[255];
     FOR_ALL_TOWNS(t) {
 
-        sprintf(buffer, "%d,%d,%d,%d,%d,%s\n", t->xy, t->larger_town, int(t->layout), t->cache.population, t->townnameparts, (t->name?t->name:""));
+        sprintf(buffer, "%d,%d,%d,%d,%d,%s,%d\n", t->xy, t->larger_town, int(t->layout), t->cache.population, t->townnameparts, (t->name?t->name:""), (t->town_size));
         std::cout << buffer << std::endl;
         f_obj << buffer;
         i++;

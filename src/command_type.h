@@ -63,12 +63,6 @@ public:
         return *this;
     }
 
-    CommandCost DivideCost()
-    {
-        this->cost /= COST_MULTIPLIER;
-        return *this;
-    }
-
 	/**
 	 * Adds the given cost to the cost of the command.
 	 * @param cost the cost to add

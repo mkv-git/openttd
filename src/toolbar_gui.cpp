@@ -93,7 +93,7 @@ void LoadTownsFromList()
     TownLayout layout;
     TownSize size;
     std::string line;
-    std::string buf[6];
+    std::string buf[7];
 
     while (std::getline(f_obj, line)) {
         int pos = 0;
@@ -114,12 +114,11 @@ void LoadTownsFromList()
             default: layout = TL_3X3_GRID;
         }
 
-        if (atoi(buf[3].c_str()) > 17000) {
+        if (atoi(buf[6].c_str()) == 1) {
             size = TSZ_MEDIUM;
         } else {
             size = TSZ_SMALL;
         }
-
 
         BuildTowns(atoi(buf[0].c_str()), size, layout, atoi(buf[4].c_str()), buf[5], false);
         std::fill_n(buf, 6, 0);
@@ -495,7 +494,7 @@ static CallBackFunction MenuClickSaveLoad(int index = 0)
 			case SLEME_LOAD_SCENARIO:  ShowSaveLoadDialog(SLD_LOAD_SCENARIO);  break;
 			case SLEME_SAVE_HEIGHTMAP: ShowSaveLoadDialog(SLD_SAVE_HEIGHTMAP); break;
 			case SLEME_LOAD_HEIGHTMAP: ShowSaveLoadDialog(SLD_LOAD_HEIGHTMAP); break;
-            case SLEME_LOAD_TOWNS:     break;
+            case SLEME_LOAD_TOWNS:     LoadTownsFromList(); break;
 			case SLEME_EXIT_TOINTRO:   AskExitToGameMenu();                    break;
 			case SLEME_EXIT_GAME:      HandleExitGameRequest();                break;
 		}
