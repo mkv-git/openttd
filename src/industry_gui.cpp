@@ -819,8 +819,8 @@ public:
         DrawString(left + WD_FRAMERECT_LEFT, right - WD_FRAMERECT_RIGHT, y, STR_INDUSTRY_CARGO_LAST_ACCEPTED_AT);
         y += FONT_HEIGHT_NORMAL;
 
-        SetDParam(0, i->last_prod_year);
-        DrawString(left + WD_FRAMERECT_LEFT, right - WD_FRAMERECT_RIGHT, y, STR_INDUSTRY_LAST_PRODUCTION_YEAR);
+        SetDParam(0, i->last_production_date);
+        DrawString(left + WD_FRAMERECT_LEFT, right - WD_FRAMERECT_RIGHT, y, STR_INDUSTRY_LAST_PRODUCTION_DATE);
         y += FONT_HEIGHT_NORMAL;
 
 		return y + WD_FRAMERECT_BOTTOM;

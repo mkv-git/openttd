@@ -1377,9 +1377,40 @@ void BaseVehicleListWindow::DrawVehicleListItems(VehicleID selected_vehicle, int
 		DrawVehicleImage(v, image_left, image_right, y + FONT_HEIGHT_SMALL - 1, selected_vehicle, EIT_IN_LIST, 0);
 		DrawString(text_left, text_right, y + line_height - FONT_HEIGHT_SMALL - WD_FRAMERECT_BOTTOM - 1, STR_VEHICLE_LIST_PROFIT_THIS_YEAR_LAST_YEAR);
 
+        const Order *vehicle_order;
+        bool has_transfer = false;
+        bool has_partial_load = false;
+        bool has_delay = false;
+        bool has_full_load = false;
+        char buffer[8];
+
+        FOR_VEHICLE_ORDERS(v, vehicle_order) {
+            OrderLoadFlags load = vehicle_order->GetLoadType();
+            if (!has_transfer)
+                has_transfer = vehicle_order->GetUnloadType() == OUFB_TRANSFER;
+
+            if (!has_partial_load)
+                has_partial_load = (vehicle_order->partial_load_percentage && vehicle_order->partial_load_percentage != 100);
+
+            if (!has_full_load)
+                has_full_load = ((load & OLFB_FULL_LOAD || load & OLF_FULL_LOAD_ANY) && !has_partial_load);
+    
+            if (!has_delay)
+                has_delay = (vehicle_order->wait_time && vehicle_order->wait_time > 0);
+        }
+
+        sprintf(buffer,
+            "%s%s%s%s",
+            has_transfer ? "T": "",
+            has_partial_load ? "P": "",
+            has_full_load ? "F": "",
+            has_delay ? "D": ""
+        );
+
 		if (v->name != NULL) {
 			/* The vehicle got a name so we will print it */
-			SetDParam(0, v->index);
+            SetDParamStr(0, buffer);
+			SetDParam(1, v->index);
 			DrawString(text_left, text_right, y, STR_TINY_BLACK_VEHICLE);
 		} else if (v->group_id != DEFAULT_GROUP) {
 			/* The vehicle has no name, but is member of a group, so print group name */

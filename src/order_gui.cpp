@@ -33,7 +33,7 @@
 
 #include "widgets/order_widget.h"
 
-
+bool set_partial_load = false;
 /** Order load types that could be given to station orders. */
 static const StringID _station_load_types[][5][5] = {
 	{
@@ -1211,6 +1211,18 @@ public:
                     return;
                 }
 
+                if(_shift_pressed && sel < this->vehicle->GetNumOrders()) {
+                    set_partial_load = true;
+                    this->selected_order = sel;
+                    const Order *o = this->vehicle->GetOrder(sel);
+                    if (!o->partial_load_percentage || o->partial_load_percentage == 100)
+                        SetDParam(0, 100);
+                    else
+                        SetDParam(0, o->partial_load_percentage);
+                    ShowQueryString(STR_JUST_INT, STR_ORDER_LOAD_PERCENTAGE_CAPTION, 4, this, CS_NUMERAL, QSF_NONE);
+                    return;
+                }
+
 				if (_ctrl_pressed && sel < this->vehicle->GetNumOrders()) {
 					TileIndex xy = this->vehicle->GetOrder(sel)->GetLocation(this->vehicle);
 					if (xy != INVALID_TILE) ScrollMainWindowToTile(xy);
@@ -1360,7 +1372,13 @@ public:
 		if (!StrEmpty(str)) {
 			VehicleOrderID sel = this->OrderGetSel();
 			uint value = atoi(str);
-
+            if (set_partial_load){
+                if (value > 100)
+                    value = 100;
+                SetPartialLoad(this->vehicle->index, sel, value);
+                set_partial_load = false;
+                return;   
+            }
 			switch (this->vehicle->GetOrder(sel)->GetConditionVariable()) {
 				case OCV_MAX_SPEED:
 					value = ConvertDisplaySpeedToSpeed(value);
@@ -1855,6 +1873,7 @@ struct OrdersReviewWindow : Window
                             break;
                     }
 
+                    SetWindowDirty(WC_VEHICLE_VIEW, vehicle->index);
                     SetWindowDirty(WC_VEHICLE_ORDERS, vehicle->index);
                     SetWindowDirty(WC_VEHICLE_TIMETABLE, vehicle->index);
 

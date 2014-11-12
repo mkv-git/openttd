@@ -223,7 +223,6 @@ void Ship::OnNewDay()
 	if (this->running_ticks == 0) return;
 
 	CommandCost cost(EXPENSES_SHIP_RUN, this->GetRunningCost() * this->running_ticks / (DAYS_IN_YEAR * DAY_TICKS));
-    cost.AffectCost();
 
 	this->profit_this_year -= cost.GetCost();
 	this->profit_this_quarter -= cost.GetCost();

@@ -827,7 +827,6 @@ static void CompaniesPayInterest()
 		SubtractMoneyFromCompany(CommandCost(EXPENSES_LOAN_INT, up_to_this_month - up_to_previous_month));
 
         cost = CommandCost(EXPENSES_OTHER, _price[PR_STATION_VALUE] >> 2);
-        cost.AffectCost();
 		SubtractMoneyFromCompany(cost);
 	}
 	cur_company.Restore();
@@ -1794,7 +1793,8 @@ static void LoadUnloadVehicle(Vehicle *front)
 			}
 
             if (load_percentage && load_percentage != 100) {
-                finished_loading = double(storage_size) / cargo_cap * 100 >= load_percentage;
+                printf("%s: %d %f\n", front->name, load_percentage, (double(storage_size) / cargo_cap));
+                finished_loading = double(storage_size) / cargo_cap * 100 >= load_percentage;                
             }
 
 			/* Refresh next hop stats if we're full loading to make the links

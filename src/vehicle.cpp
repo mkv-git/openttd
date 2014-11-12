@@ -2801,3 +2801,22 @@ void SetPartialLoad(int index, int order_idx)
             InvalidateVehicleOrder(u, VIWD_MODIFY_ORDERS);
     }
 }
+
+void SetPartialLoad(int index, int order_idx, int load_percentage)
+{
+    Vehicle *veh = Vehicle::GetIfValid(index);
+    if (veh == NULL)
+        return;
+
+    Order *order = veh->GetOrder(order_idx);
+    if (order->GetLoadType() == OLF_LOAD_IF_POSSIBLE || order->GetLoadType() == OLFB_NO_LOAD)
+        return;
+    order->partial_load_percentage = load_percentage;
+            
+    printf("set partial: %d\n", load_percentage);
+    Vehicle *u = veh->FirstShared();
+    for (; u != NULL; u = u->NextShared()) {        
+        if (u->GetOrder(order_idx)->partial_load_percentage)
+            InvalidateVehicleOrder(u, VIWD_MODIFY_ORDERS);
+    }
+}

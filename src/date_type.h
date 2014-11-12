@@ -28,7 +28,7 @@ typedef uint8  Day;   ///< Type for the day of the month, note: 1 based, first d
  * 1 tick is approximately 30 ms.
  * 1 day is thus about 2 seconds (74 * 30 = 2220) on a machine that can run OpenTTD normally
  */
-static const int HOUR_TICK_DIV     = 6;
+static const int HOUR_TICK_DIV     = 12;
 static const int COST_MULTIPLIER   = 24 / HOUR_TICK_DIV;
 static const int HOUR_TICKS        = 74 / HOUR_TICK_DIV; /// ticks per hour
 static const int DAY_TICKS         = HOUR_TICKS * 24; ///< hours per day

@@ -3262,7 +3262,7 @@ STR_INDUSTRY_VIEW_CAPTION                                       :{WHITE}{INDUSTR
 STR_INDUSTRY_VIEW_PRODUCTION_LAST_MONTH_TITLE                   :{BLACK}Production last month:
 STR_INDUSTRY_CONSTRUCTED_AT                                     :{BLACK}Built at: {YELLOW}{DATE_SHORT}
 STR_INDUSTRY_CARGO_LAST_ACCEPTED_AT                             :{BLACK}Cargo last accepted at: {YELLOW}{DATE_SHORT}
-STR_INDUSTRY_LAST_PRODUCTION_YEAR                               :{BLACK}Last production year {YELLOW}{NUM}
+STR_INDUSTRY_LAST_PRODUCTION_DATE                               :{BLACK}Last production year {YELLOW}{DATE_SHORT}
 STR_INDUSTRY_VIEW_LAST_ACCEPTED_CARGO_DATA                      :{BLACK}
 STR_INDUSTRY_VIEW_TRANSPORTED                                   :{YELLOW}{CARGO_LONG}{RAW_STRING}{BLACK} ({COMMA}% transported)
 STR_INDUSTRY_VIEW_LOCATION_TOOLTIP                              :{BLACK}Centre the main view on industry location. Ctrl+Click opens a new viewport on industry location
@@ -3769,6 +3769,7 @@ STR_ORDER_CONDITIONAL_COMPARATOR_IS_FALSE                       :is false
 
 STR_ORDER_CONDITIONAL_VALUE_TOOLTIP                             :{BLACK}The value to compare the vehicle data against
 STR_ORDER_CONDITIONAL_VALUE_CAPT                                :{WHITE}Enter value to compare against
+STR_ORDER_LOAD_PERCENTAGE_CAPTION                               :{WHITE}Enter partial load percentage value
 
 STR_ORDERS_SKIP_BUTTON                                          :{BLACK}Skip
 STR_ORDERS_SKIP_TOOLTIP                                         :{BLACK}Skip the current order, and start the next. Ctrl+Click skips to the selected order
@@ -4923,7 +4924,7 @@ STR_WHITE_STRING                                                :{WHITE}{STRING}
 STR_ORANGE_STRING1_WHITE                                        :{ORANGE}{STRING1}{WHITE}
 STR_ORANGE_STRING1_LTBLUE                                       :{ORANGE}{STRING1}{LTBLUE}
 STR_TINY_BLACK_HEIGHT                                           :{TINY_FONT}{BLACK}{HEIGHT}
-STR_TINY_BLACK_VEHICLE                                          :{TINY_FONT}{BLACK}{VEHICLE}
+STR_TINY_BLACK_VEHICLE                                          :{TINY_FONT}{GOLD}{RAW_STRING} {BLACK}{VEHICLE}
 STR_TINY_RIGHT_ARROW                                            :{TINY_FONT}{RIGHT_ARROW}
 
 STR_BLACK_1                                                     :{BLACK}1

@@ -1327,7 +1327,7 @@ static CommandCost FindTownForIndustry(TileIndex tile, int type, Town **t)
     int bank_count = 0;
     const Industry *i;
     //const char *town_name = FetchTownName(*t);
-    bool no_more_banks = false;
+    bool allow_new_bank = false;
 
     if (((_settings_game.economy.multiple_industry_per_town) || (type == IT_BANK_TEMP)) && (town_population > 1200)) {
         FOR_ALL_INDUSTRIES(i) {
@@ -1337,23 +1337,12 @@ static CommandCost FindTownForIndustry(TileIndex tile, int type, Town **t)
                 else if ((i->town == *t) and (i->type == IT_BANK_TEMP))
                     bank_count++;
 
-                if (bank_count > 2) {
-                    no_more_banks = true;
-                }
-
-                if (bank_count == 1 && (town_population < 10000)) {
-                    no_more_banks = true;
-                }
-
-                if (bank_count == 2 && (town_population < 20000)) {
-                    no_more_banks = true;
-                }
-
-                if (no_more_banks) {
+                allow_new_bank = bank_count <= (town_population / 10000) && (bank_count < 5);
+                if (!allow_new_bank) {
                     *t = NULL;
                     return_cmd_error(STR_ERROR_ONLY_ONE_ALLOWED_PER_TOWN);
                 }
-                no_more_banks = false;
+                allow_new_bank = false;
             } catch (int e) {
                 continue;
             }
@@ -1710,6 +1699,7 @@ static void DoCreateNewIndustry(Industry *i, TileIndex tile, IndustryType type, 
 	i->last_month_transported[1] = 0;
 	i->was_cargo_delivered = false;
 	i->last_prod_year = _cur_year;
+    i->last_production_date = _date;
 	i->founder = founder;
 
 	i->construction_date = _date;
@@ -2197,6 +2187,7 @@ static void UpdateIndustryStatistics(Industry *i)
 			byte pct = 0;
 			if (i->this_month_production[j] != 0) {
 				i->last_prod_year = _cur_year;
+                i->last_production_date = _date;
 				pct = min(i->this_month_transported[j] * 256 / i->this_month_production[j], 255);
 			}
 			i->last_month_pct_transported[j] = pct;
@@ -2544,8 +2535,8 @@ static void ChangeIndustryProduction(Industry *i, bool monthly)
 	} else {
 		if (monthly != smooth_economy) return;
         if (indspec->life_type == INDUSTRYLIFE_BLACK_HOLE) {
-            if (i->construction_date < (_date - DAYS_IN_YEAR * 15)) {
-                closeit = (i->last_cargo_accepted_at < (_date - DAYS_IN_YEAR * 5));
+            if (i->construction_date < (_date - DAYS_IN_YEAR * 15 / COST_MULTIPLIER)) {
+                closeit = (i->last_cargo_accepted_at < (_date - DAYS_IN_YEAR * 5 / COST_MULTIPLIER));
             } else {
                 return;
             }
@@ -2619,9 +2610,7 @@ static void ChangeIndustryProduction(Industry *i, bool monthly)
 	}
 
 	if (!callback_enabled && (indspec->life_type & INDUSTRYLIFE_PROCESSING)) {
-		if ( (byte)(_cur_year - i->last_prod_year) >= 5 && Chance16(1, smooth_economy ? 180 : 2)) {
-			closeit = true;
-		}
+        closeit = (i->last_production_date < (_date - DAYS_IN_YEAR * 5 / COST_MULTIPLIER)) && Chance16(1, smooth_economy ? 180 : 2);
 	}
 
 	/* Increase if needed */
@@ -2657,9 +2646,10 @@ static void ChangeIndustryProduction(Industry *i, bool monthly)
 	if (recalculate_multipliers) i->RecomputeProductionMultipliers();
 
     if ((indspec->life_type != INDUSTRYLIFE_BLACK_HOLE) && (!closeit)) {
-        if (i->construction_date < (_date - DAYS_IN_YEAR * 15)) {
+        if (i->construction_date < (_date - DAYS_IN_YEAR * 15 / COST_MULTIPLIER)) {
             if (indspec->life_type & INDUSTRYLIFE_PROCESSING) {
-                closeit = ((byte)(_cur_year - i->last_prod_year) >= 5);
+                closeit = i->last_production_date < (_date - DAYS_IN_YEAR * 5 / COST_MULTIPLIER);
+                //closeit = ((byte)(_cur_year - i->last_prod_year) >= 5);
             }
         }
 

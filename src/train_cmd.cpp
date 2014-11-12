@@ -4001,7 +4001,6 @@ void Train::OnNewDay()
 		if (this->running_ticks != 0) {
 			/* running costs */
 			CommandCost cost(EXPENSES_TRAIN_RUN, this->GetRunningCost() * this->running_ticks / (DAYS_IN_YEAR  * DAY_TICKS));
-            cost.AffectCost();
 
 			this->profit_this_year -= cost.GetCost();
 			this->profit_this_quarter -= cost.GetCost();

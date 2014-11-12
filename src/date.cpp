@@ -191,7 +191,7 @@ static const Month _autosave_months[] = {
 
 static void OnNewQuarter()
 {
-    if (_cur_quarter != 0)
+    if ((_cur_quarter != 0) && (COST_MULTIPLIER > 2))
         VehiclesQuarterlyLoop();
 }
 
