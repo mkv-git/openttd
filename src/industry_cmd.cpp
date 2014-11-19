@@ -2652,7 +2652,7 @@ static void ChangeIndustryProduction(Industry *i, bool monthly)
         if (i->construction_date < (_date - DAYS_IN_YEAR * 15 / COST_MULTIPLIER)) {
             if (indspec->life_type & INDUSTRYLIFE_PROCESSING) {
                 closeit = i->last_production_date < (_date - DAYS_IN_YEAR * 5 / COST_MULTIPLIER);
-            } else if (indspec->life_type & (INDUSTRYLIFE_ORGANIC | INDUSTRYLIFE_EXTRACTIVE) != 0) {
+            } else if ((indspec->life_type & (INDUSTRYLIFE_ORGANIC | INDUSTRYLIFE_EXTRACTIVE)) != 0) {
                 closeit = i->last_transported_date < (_date - DAYS_IN_YEAR * 5 / COST_MULTIPLIER);
             }
         }

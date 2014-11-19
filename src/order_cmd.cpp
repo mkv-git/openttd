@@ -33,6 +33,7 @@
 #include "order_backup.h"
 #include "town.h"
 #include "townname_func.h"
+#include <vector>
 
 #include "table/strings.h"
 
@@ -54,8 +55,6 @@ std::string GenerateVehicleName(Vehicle *current_vehicle, const std::string name
     const Vehicle *vehicle;
     const int name_len = name.length();
     std::string new_vehicle_name = name;
-    //sprintf(current_vehicle->name, "%s", "blah"); 
-    current_vehicle->name = "just_some_random_name";
     char temp_buffer[name_len + 1];
     int name_len_diff;
     bool is_first_vehicle_found = false;
@@ -129,26 +128,7 @@ void BuildVehicleName(Vehicle *vehicle)
     const Station *dest_st;
     std::stringstream new_vehicle_name;
 
-    if (vehicle->type == VEH_ROAD) {
-        FOR_VEHICLE_ORDERS(vehicle, vehicle_order) {
-            if (vehicle_order->GetType() != OT_GOTO_STATION){
-                continue;
-            }
-
-            destination_id = vehicle_order->GetDestination();
-            dest_st = Station::GetIfValid(destination_id);
-            if (dest_st == NULL){
-                continue;
-            }
-
-            const char *order_town_name = FetchTownName(dest_st->town);
-            new_vehicle_name << order_town_name;
-            break;
-        }
-        std::string generated_name = GenerateVehicleName(vehicle, new_vehicle_name.str());
-        vehicle->name = strdup(generated_name.c_str());
-        return;
-    }
+    std::vector<std::string> destination_names;
 
     FOR_VEHICLE_ORDERS(vehicle, vehicle_order) {
 
@@ -163,18 +143,21 @@ void BuildVehicleName(Vehicle *vehicle)
         }
 
         const char *order_town_name = FetchTownName(dest_st->town);
+        if (destination_names.size() > 0) {
+            int dest_comp = strcmp(order_town_name, destination_names.back().c_str());
+            if (dest_comp == 0) {
+                continue;
+            }
+        }
+
+        destination_names.push_back(order_town_name);
         new_vehicle_name << (new_vehicle_name.rdbuf()->in_avail() == 0?"":"-") << order_town_name;
     }
 
-    if (new_vehicle_name.rdbuf()->in_avail() == 0){
-        switch(vehicle->type) {
-            case VEH_TRAIN: new_vehicle_name << "Dummy train"; break;
-            default: new_vehicle_name << "Change me";
-        }
-    }
+    if (new_vehicle_name.rdbuf()->in_avail() == 0)
+        new_vehicle_name << "Change me";
 
     std::string generated_name = GenerateVehicleName(vehicle, new_vehicle_name.str());
-
     vehicle->name = strdup(generated_name.c_str());
 }
 
