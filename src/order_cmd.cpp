@@ -425,6 +425,7 @@ void Order::AssignOrder(const Order &other)
 	this->wait_time   = other.wait_time;
 	this->travel_time = other.travel_time;
 	this->max_speed   = other.max_speed;
+    this->partial_load_percentage = other.partial_load_percentage;
 }
 
 /**
