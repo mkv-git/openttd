@@ -3263,6 +3263,7 @@ STR_INDUSTRY_VIEW_PRODUCTION_LAST_MONTH_TITLE                   :{BLACK}Producti
 STR_INDUSTRY_CONSTRUCTED_AT                                     :{BLACK}Built at: {YELLOW}{DATE_SHORT}
 STR_INDUSTRY_CARGO_LAST_ACCEPTED_AT                             :{BLACK}Cargo last accepted at: {YELLOW}{DATE_SHORT}
 STR_INDUSTRY_LAST_PRODUCTION_DATE                               :{BLACK}Last production year {YELLOW}{DATE_SHORT}
+STR_INDUSTRY_LAST_TRANSPORTED_DATE                              :{BLACK}Cargo last transported at: {YELLOW}{DATE_SHORT}
 STR_INDUSTRY_VIEW_LAST_ACCEPTED_CARGO_DATA                      :{BLACK}
 STR_INDUSTRY_VIEW_TRANSPORTED                                   :{YELLOW}{CARGO_LONG}{RAW_STRING}{BLACK} ({COMMA}% transported)
 STR_INDUSTRY_VIEW_LOCATION_TOOLTIP                              :{BLACK}Centre the main view on industry location. Ctrl+Click opens a new viewport on industry location
@@ -3341,10 +3342,10 @@ STR_GROUP_REMOVE_ALL_VEHICLES                                   :Remove all vehi
 
 STR_GROUP_RENAME_CAPTION                                        :{BLACK}Rename a group
 
-STR_GROUP_PROFIT_MIN                                            :{TINY_FONT}{BLACK}Min:
-STR_GROUP_PROFIT_MAX                                            :{TINY_FONT}{BLACK}Max:
-STR_GROUP_PROFIT_AVG                                            :{TINY_FONT}{BLACK}Avg:
-STR_GROUP_PROFIT_TOTAL                                          :{TINY_FONT}{BLACK}Sum:
+STR_GROUP_PROFIT_MIN                                            :{TINY_FONT}{BLACK} <
+STR_GROUP_PROFIT_MAX                                            :{TINY_FONT}{BLACK} >
+STR_GROUP_PROFIT_AVG                                            :{TINY_FONT}{BLACK} ~
+STR_GROUP_PROFIT_TOTAL                                          :{TINY_FONT}{RED} =
 STR_GROUP_POSITIVE_INCOME                                       :{TINY_FONT}{BLACK}{CURRENCY_LONG}
 STR_GROUP_NEGATIVE_INCOME                                       :{TINY_FONT}{BLACK}{CURRENCY_LONG}
 STR_GROUP_PROFIT_YEAR_CAPTION                                   :{TINY_FONT}{YELLOW}{NUM}
@@ -4924,7 +4925,7 @@ STR_WHITE_STRING                                                :{WHITE}{STRING}
 STR_ORANGE_STRING1_WHITE                                        :{ORANGE}{STRING1}{WHITE}
 STR_ORANGE_STRING1_LTBLUE                                       :{ORANGE}{STRING1}{LTBLUE}
 STR_TINY_BLACK_HEIGHT                                           :{TINY_FONT}{BLACK}{HEIGHT}
-STR_TINY_BLACK_VEHICLE                                          :{TINY_FONT}{GOLD}{RAW_STRING} {BLACK}{VEHICLE}
+STR_TINY_BLACK_VEHICLE                                          :{TINY_FONT}{BLACK}{RAW_STRING}{GREEN}{RAW_STRING}{RED}{RAW_STRING}{GOLD}{RAW_STRING}{ORANGE}{RAW_STRING} {BLACK}{VEHICLE}
 STR_TINY_RIGHT_ARROW                                            :{TINY_FONT}{RIGHT_ARROW}
 
 STR_BLACK_1                                                     :{BLACK}1

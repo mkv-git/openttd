@@ -1793,7 +1793,6 @@ static void LoadUnloadVehicle(Vehicle *front)
 			}
 
             if (load_percentage && load_percentage != 100) {
-                printf("%s: %d %f\n", front->name, load_percentage, (double(storage_size) / cargo_cap));
                 finished_loading = double(storage_size) / cargo_cap * 100 >= load_percentage;                
             }
 

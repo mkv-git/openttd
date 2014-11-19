@@ -54,15 +54,15 @@ std::string GenerateVehicleName(Vehicle *current_vehicle, const std::string name
     const Vehicle *vehicle;
     const int name_len = name.length();
     std::string new_vehicle_name = name;
+    //sprintf(current_vehicle->name, "%s", "blah"); 
     current_vehicle->name = "just_some_random_name";
     char temp_buffer[name_len + 1];
     int name_len_diff;
     bool is_first_vehicle_found = false;
 
     FOR_ALL_VEHICLES(vehicle) {
-        //if (!(vehicle->type == VEH_TRAIN || vehicle->type == VEH_SHIP || vehicle->type == VEH_AIRCRAFT)) {
-        //    continue;
-        //}
+        if (vehicle->type > VEH_AIRCRAFT)
+            continue;
 
         if (vehicle->name == NULL) {
             continue;
@@ -115,10 +115,6 @@ std::string GenerateVehicleName(Vehicle *current_vehicle, const std::string name
             break;
         }
     }
-
-    char buf[8];
-    sprintf(buf, " %u", first_number);
-    new_vehicle_name += buf;
 
     return new_vehicle_name;
 }
@@ -189,7 +185,7 @@ void RebuildVehicleNamesOnTownRename(const Town *town)
     const Station *dest_st;
 
     FOR_ALL_VEHICLES(vehicle) {
-        if (!(vehicle->type == VEH_TRAIN || vehicle->type == VEH_SHIP || vehicle->type == VEH_AIRCRAFT))
+        if (vehicle->type > VEH_AIRCRAFT)
             continue;
 
         FOR_VEHICLE_ORDERS(vehicle, order) {
@@ -405,6 +401,7 @@ Order::Order(uint32 packed)
 	this->wait_time     = 0;
 	this->travel_time   = 0;
 	this->max_speed     = UINT16_MAX;
+    this->partial_load_percentage = 100;
 }
 
 /**
@@ -1211,7 +1208,7 @@ CommandCost CmdDeleteOrder(TileIndex tile, DoCommandFlag flags, uint32 p1, uint3
 	if (v->GetOrder(sel_ord) == NULL) return CMD_ERROR;
 
 	if (flags & DC_EXEC) DeleteOrder(v, sel_ord);
-    if (v->type == VEH_TRAIN || v->type == VEH_SHIP || v->type == VEH_AIRCRAFT) {
+    if (v->type < VEH_COMPANY_END) {
         BuildVehicleName(v);
     }
 
@@ -1428,7 +1425,7 @@ CommandCost CmdMoveOrder(TileIndex tile, DoCommandFlag flags, uint32 p1, uint32 
 
 		/* Make sure to rebuild the whole list */
 		InvalidateWindowClassesData(GetWindowClassForVehicleType(v->type), 0);
-        if (v->type == VEH_TRAIN || v->type == VEH_SHIP || v->type == VEH_AIRCRAFT) {
+        if (v->type < VEH_COMPANY_END) {
             BuildVehicleName(v);
         }
 	}

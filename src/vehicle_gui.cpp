@@ -1382,35 +1382,39 @@ void BaseVehicleListWindow::DrawVehicleListItems(VehicleID selected_vehicle, int
         bool has_partial_load = false;
         bool has_delay = false;
         bool has_full_load = false;
-        char buffer[8];
+        bool has_no_load = false;
 
         FOR_VEHICLE_ORDERS(v, vehicle_order) {
             OrderLoadFlags load = vehicle_order->GetLoadType();
+            OrderUnloadFlags unload = vehicle_order->GetUnloadType();
+
             if (!has_transfer)
-                has_transfer = vehicle_order->GetUnloadType() == OUFB_TRANSFER;
+                has_transfer = unload & OUFB_TRANSFER;
 
             if (!has_partial_load)
                 has_partial_load = (vehicle_order->partial_load_percentage && vehicle_order->partial_load_percentage != 100);
 
             if (!has_full_load)
-                has_full_load = ((load & OLFB_FULL_LOAD || load & OLF_FULL_LOAD_ANY) && !has_partial_load);
+                has_full_load = ((load & OLFB_FULL_LOAD || load & OLF_FULL_LOAD_ANY) && (vehicle_order->partial_load_percentage == 100 || !vehicle_order->partial_load_percentage));
     
             if (!has_delay)
                 has_delay = (vehicle_order->wait_time && vehicle_order->wait_time > 0);
+
+            if (!has_no_load)
+                has_no_load = load & OLFB_NO_LOAD && ((unload & OUFB_TRANSFER) == 0);
         }
 
-        sprintf(buffer,
-            "%s%s%s%s",
-            has_transfer ? "T": "",
-            has_partial_load ? "P": "",
-            has_full_load ? "F": "",
-            has_delay ? "D": ""
-        );
 
 		if (v->name != NULL) {
 			/* The vehicle got a name so we will print it */
-            SetDParamStr(0, buffer);
-			SetDParam(1, v->index);
+
+            SetDParamStr(0, has_transfer ? "T": " ");
+            SetDParamStr(1, has_partial_load ? "P": " ");
+            SetDParamStr(2, has_full_load ? "F": " ");
+            SetDParamStr(3, has_delay ? "D": " ");
+            SetDParamStr(4, has_no_load ? "N": " ");
+
+			SetDParam(5, v->index);
 			DrawString(text_left, text_right, y, STR_TINY_BLACK_VEHICLE);
 		} else if (v->group_id != DEFAULT_GROUP) {
 			/* The vehicle has no name, but is member of a group, so print group name */

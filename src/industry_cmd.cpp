@@ -1700,6 +1700,7 @@ static void DoCreateNewIndustry(Industry *i, TileIndex tile, IndustryType type, 
 	i->was_cargo_delivered = false;
 	i->last_prod_year = _cur_year;
     i->last_production_date = _date;
+    i->last_transported_date = _date;
 	i->founder = founder;
 
 	i->construction_date = _date;
@@ -2189,6 +2190,8 @@ static void UpdateIndustryStatistics(Industry *i)
 				i->last_prod_year = _cur_year;
                 i->last_production_date = _date;
 				pct = min(i->this_month_transported[j] * 256 / i->this_month_production[j], 255);
+                if (pct > 0)
+                    i->last_transported_date = _date;
 			}
 			i->last_month_pct_transported[j] = pct;
 
@@ -2649,7 +2652,8 @@ static void ChangeIndustryProduction(Industry *i, bool monthly)
         if (i->construction_date < (_date - DAYS_IN_YEAR * 15 / COST_MULTIPLIER)) {
             if (indspec->life_type & INDUSTRYLIFE_PROCESSING) {
                 closeit = i->last_production_date < (_date - DAYS_IN_YEAR * 5 / COST_MULTIPLIER);
-                //closeit = ((byte)(_cur_year - i->last_prod_year) >= 5);
+            } else if (indspec->life_type & (INDUSTRYLIFE_ORGANIC | INDUSTRYLIFE_EXTRACTIVE) != 0) {
+                closeit = i->last_transported_date < (_date - DAYS_IN_YEAR * 5 / COST_MULTIPLIER);
             }
         }
 

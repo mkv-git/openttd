@@ -62,6 +62,7 @@ struct Industry : IndustryPool::PoolItem<&_industry_pool> {
 
 	OwnerByte founder;                  ///< Founder of the industry
     Date last_production_date;
+    Date last_transported_date;
 	Date construction_date;             ///< Date of the construction of the industry
 	uint8 construction_type;            ///< Way the industry was constructed (@see IndustryConstructionType)
 	Date last_cargo_accepted_at;        ///< Last day cargo was accepted by this industry
