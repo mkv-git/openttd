@@ -1337,7 +1337,7 @@ static CommandCost FindTownForIndustry(TileIndex tile, int type, Town **t)
                 else if ((i->town == *t) and (i->type == IT_BANK_TEMP))
                     bank_count++;
 
-                allow_new_bank = bank_count <= (town_population / 10000) && (bank_count < 5);
+                allow_new_bank = bank_count <= (town_population / 10000) && (bank_count < 3);
                 if (!allow_new_bank) {
                     *t = NULL;
                     return_cmd_error(STR_ERROR_ONLY_ONE_ALLOWED_PER_TOWN);

@@ -3140,6 +3140,12 @@ static void UpdateTownGrowRate(Town *t)
 		t->grow_counter = m;
 	}
 
+    if (t->ratings[_local_company] > 1){
+        t->growth_rate *= int(1000.0 / t->ratings[_local_company]);
+    } else {
+        return;
+    }
+
 	SetBit(t->flags, TOWN_IS_GROWING);
 	SetWindowDirty(WC_TOWN_VIEW, t->index);
 }

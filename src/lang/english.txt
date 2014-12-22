@@ -3252,9 +3252,9 @@ STR_COMPANY_INFRASTRUCTURE_VIEW_TOTAL                           :{WHITE}{CURRENC
 # Industry directory
 STR_INDUSTRY_DIRECTORY_CAPTION                                  :{WHITE}Industries
 STR_INDUSTRY_DIRECTORY_NONE                                     :{ORANGE}- None -
-STR_INDUSTRY_DIRECTORY_ITEM                                     :{ORANGE}{INDUSTRY}{BLACK} ({CARGO_LONG}{RAW_STRING}){YELLOW} ({COMMA}% transported)
-STR_INDUSTRY_DIRECTORY_ITEM_TWO                                 :{ORANGE}{INDUSTRY}{BLACK} ({CARGO_LONG}{RAW_STRING}/{CARGO_LONG}{RAW_STRING}){YELLOW} ({COMMA}%/{COMMA}% transported)
-STR_INDUSTRY_DIRECTORY_ITEM_NOPROD                              :{ORANGE}{INDUSTRY}
+STR_INDUSTRY_DIRECTORY_ITEM                                     :{ORANGE}{INDUSTRY}{BLACK} ({CARGO_LONG}{RAW_STRING}){YELLOW} ({COMMA}% transported) {WHITE} {DATE_SHORT}
+STR_INDUSTRY_DIRECTORY_ITEM_TWO                                 :{ORANGE}{INDUSTRY}{BLACK} ({CARGO_LONG}{RAW_STRING}/{CARGO_LONG}{RAW_STRING}){YELLOW} ({COMMA}%/{COMMA}% transported) {WHITE} {DATE_SHORT}
+STR_INDUSTRY_DIRECTORY_ITEM_NOPROD                              :{ORANGE}{INDUSTRY} {WHITE} {DATE_SHORT}
 STR_INDUSTRY_DIRECTORY_LIST_CAPTION                             :{BLACK}Industry names - click on name to centre main view on industry. Ctrl+Click opens a new viewport on industry location
 
 # Industry view

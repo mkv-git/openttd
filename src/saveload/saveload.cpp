@@ -43,7 +43,11 @@
 #include "../string_func.h"
 #include "../fios.h"
 #include "../error.h"
-
+#include "../smallmap_gui.h"
+#include "../group.h"
+#include "../terraform_gui.h"
+#include "../vehicle_gui.h"
+#include "../company_gui.h"
 #include "table/strings.h"
 
 #include "saveload_internal.h"
@@ -2697,6 +2701,14 @@ static SaveOrLoadResult DoLoad(LoadFilter *reader, bool load_check)
 		GamelogStopAction();
 	}
 
+    if (_game_mode != GM_EDITOR && _game_mode != GM_MENU) {
+        ShowSmallMap();
+        //ShowVehicleListWindow(_current_company, VEH_ROAD);
+        //ShowVehicleListWindow(_current_company, VEH_TRAIN);
+        //ShowVehicleListWindow(_current_company, VEH_AIRCRAFT);
+        //ShowVehicleListWindow(_current_company, VEH_SHIP);
+        ShowCompanyFinances(_current_company);
+    }
 	return SL_OK;
 }
 

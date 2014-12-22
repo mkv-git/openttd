@@ -737,9 +737,12 @@ CommandCost CmdAutoreplaceVehicle(TileIndex tile, DoCommandFlag flags, uint32 p1
                 int i;
                 for (w = Train::From(v), i=0; w != NULL; w = w->GetNextUnit(), i++) {
                     if (i == 1) {
+                        CommandCost xtra_head;
                         if (RailVehInfo(w->engine_type)->railveh_type != RAILVEH_WAGON) {
-                            DoCommand(0, w->index, 0, flags & ~DC_EXEC, GetCmdSellVeh(w));
+                            xtra_head = DoCommand(0, w->index, 0, flags & ~DC_EXEC, GetCmdSellVeh(w));
                         }
+                        if ((flags & DC_EXEC) != 0)
+                            cost.AddCost(xtra_head.GetCost());
                         break;
                     }
                 }
@@ -767,9 +770,13 @@ CommandCost CmdAutoreplaceVehicle(TileIndex tile, DoCommandFlag flags, uint32 p1
                 } else {
                     Train *w;
                     int i;
+                    
                     for (w = Train::From(v), i=0; w != NULL; w = w->GetNextUnit(), i++) {
-                        if (i == 1)
-                            DoCommand(0, w->index, 0, DC_EXEC, GetCmdSellVeh(w));
+                        if (i == 1) {
+                            CommandCost xtra_head = DoCommand(0, w->index, 0, DC_EXEC, GetCmdSellVeh(w));
+                            cost.AddCost(xtra_head.GetCost());
+                            break;
+                        }
                     }
                 }
 				ret = ReplaceChain(&v, flags, wagon_removal, &nothing_to_do);

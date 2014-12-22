@@ -516,9 +516,9 @@ restart:;
 void ResetCompanyLivery(Company *c)
 {
 	for (LiveryScheme scheme = LS_BEGIN; scheme < LS_END; scheme++) {
-		c->livery[scheme].in_use  = false;
-		c->livery[scheme].colour1 = c->colour;
-		c->livery[scheme].colour2 = c->colour;
+		c->livery[scheme].in_use  = true;
+		c->livery[scheme].colour1 = COLOUR_RED;
+		c->livery[scheme].colour2 = COLOUR_DARK_BLUE;
 	}
 }
 
@@ -534,7 +534,8 @@ Company *DoStartupNewCompany(bool is_ai, CompanyID company = INVALID_COMPANY)
 	if (!Company::CanAllocateItem()) return NULL;
 
 	/* we have to generate colour before this company is valid */
-	Colours colour = GenerateCompanyColour();
+    GenerateCompanyColour();
+	Colours colour = COLOUR_BROWN;
 
 	Company *c;
 	if (company == INVALID_COMPANY) {

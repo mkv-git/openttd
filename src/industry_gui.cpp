@@ -1236,10 +1236,12 @@ protected:
 			SetDParam(p++, ToPercent8(i->last_month_pct_transported[j]));
 		}
 
+           
+        SetDParam(p++, i->construction_date);
 		/* Drawing the right string */
 		switch (p) {
-			case 1:  return STR_INDUSTRY_DIRECTORY_ITEM_NOPROD;
-			case 5:  return STR_INDUSTRY_DIRECTORY_ITEM;
+			case 2:  return STR_INDUSTRY_DIRECTORY_ITEM_NOPROD;
+			case 6:  return STR_INDUSTRY_DIRECTORY_ITEM;
 			default: return STR_INDUSTRY_DIRECTORY_ITEM_TWO;
 		}
 	}
