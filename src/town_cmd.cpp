@@ -3146,6 +3146,9 @@ static void UpdateTownGrowRate(Town *t)
         return;
     }
 
+    if (t->growth_rate > 300)
+        t->growth_rate = 300;
+
 	SetBit(t->flags, TOWN_IS_GROWING);
 	SetWindowDirty(WC_TOWN_VIEW, t->index);
 }

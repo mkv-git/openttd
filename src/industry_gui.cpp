@@ -815,18 +815,23 @@ public:
         DrawString(left + WD_FRAMERECT_LEFT, right - WD_FRAMERECT_RIGHT, y, STR_INDUSTRY_CONSTRUCTED_AT);
         y += FONT_HEIGHT_NORMAL;
 
-        SetDParam(0, i->last_cargo_accepted_at);
-        DrawString(left + WD_FRAMERECT_LEFT, right - WD_FRAMERECT_RIGHT, y, STR_INDUSTRY_CARGO_LAST_ACCEPTED_AT);
-        y += FONT_HEIGHT_NORMAL;
+        if (i->last_cargo_accepted_at) {
+            SetDParam(0, i->last_cargo_accepted_at);
+            DrawString(left + WD_FRAMERECT_LEFT, right - WD_FRAMERECT_RIGHT, y, STR_INDUSTRY_CARGO_LAST_ACCEPTED_AT);
+            y += FONT_HEIGHT_NORMAL;
+        }
 
-        SetDParam(0, i->last_production_date);
-        DrawString(left + WD_FRAMERECT_LEFT, right - WD_FRAMERECT_RIGHT, y, STR_INDUSTRY_LAST_PRODUCTION_DATE);
-        y += FONT_HEIGHT_NORMAL;
+        if (i->last_production_date) {               
+          SetDParam(0, i->last_production_date);
+          DrawString(left + WD_FRAMERECT_LEFT, right - WD_FRAMERECT_RIGHT, y, STR_INDUSTRY_LAST_PRODUCTION_DATE);
+          y += FONT_HEIGHT_NORMAL;
+        }
 
-        SetDParam(0, i->last_transported_date);
-        DrawString(left + WD_FRAMERECT_LEFT, right - WD_FRAMERECT_RIGHT, y, STR_INDUSTRY_LAST_TRANSPORTED_DATE);
-        y += FONT_HEIGHT_NORMAL;
-
+        if (i->last_transported_date) {
+            SetDParam(0, i->last_transported_date);
+            DrawString(left + WD_FRAMERECT_LEFT, right - WD_FRAMERECT_RIGHT, y, STR_INDUSTRY_LAST_TRANSPORTED_DATE);
+            y += FONT_HEIGHT_NORMAL;
+        }
 		return y + WD_FRAMERECT_BOTTOM;
 	}
 
