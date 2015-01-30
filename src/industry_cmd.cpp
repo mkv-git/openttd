@@ -1632,6 +1632,11 @@ static CommandCost CheckIfFarEnoughFromConflictingIndustry(TileIndex tile, int t
 static void AdvertiseIndustryOpening(const Industry *ind)
 {
 	const IndustrySpec *ind_spc = GetIndustrySpec(ind->type);
+    // easyiest way to supress showing opening of industries
+    // except for banks
+    if (ind->type != IT_BANK_TEMP)
+        return;
+
 	SetDParam(0, ind_spc->name);
 	if (ind_spc->new_industry_text > STR_LAST_STRINGID) {
 		SetDParam(1, STR_TOWN_NAME);
