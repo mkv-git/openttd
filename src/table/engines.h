@@ -603,22 +603,22 @@ static const AircraftVehicleInfo _orig_aircraft_vehicle_info[] = {
 	AVI(  6, 18, 240, J, SND_09_JET,                     40,  74, 30, 200 ), //  5 Bakewell Luckett LB-8
 	AVI(  2, 17, 150, P, SND_09_JET,                     35,  74, 15, 100 ), //  6 Bakewell Luckett LB-9
 	AVI(  2, 18, 245, J, SND_09_JET,                     40,  74, 30, 150 ), //  7 Bakewell Luckett LB80
-	AVI(  3, 19, 192, J, SND_09_JET,                     40,  80, 40, 220 ), //  8 Bakewell Luckett LB-10
-	AVI(  3, 20, 190, J, SND_09_JET,                     40,  84, 25, 230 ), //  9 Bakewell Luckett LB-11
+	AVI(  3, 20, 192, J, SND_09_JET,                     40,  80, 40, 220 ), //  8 Bakewell Luckett LB-10
+	AVI(  3, 30, 190, J, SND_09_JET,                     40,  84, 25, 230 ), //  9 Bakewell Luckett LB-11
 	AVI(  2, 16, 135, J, SND_09_JET,                     35,  74, 10,  95 ), // 10 Yate Aerospace YAC 1-11
-	AVI(  2, 18, 240, J, SND_09_JET,                     40,  74, 35, 170 ), // 11 Darwin 100
+	AVI(  2, 20, 240, J, SND_09_JET,                     40,  74, 35, 170 ), // 11 Darwin 100
 	AVI(  4, 17, 155, J, SND_09_JET,                     40,  80, 15, 110 ), // 12 Darwin 200
 	AVI(  7, 50, 253, J, SND_3D_ANOTHER_JET_OVERHEAD,    40,  90, 50, 300 ), // 13 Darwin 300
-	AVI(  4, 18, 210, J, SND_09_JET,                     40,  97, 25, 200 ), // 14 Darwin 400
-	AVI(  4, 19, 220, J, SND_09_JET,                     40,  105, 25, 240 ), // 15 Darwin 500
-	AVI(  4, 40, 230, J, SND_09_JET,                     40,  115, 40, 260 ), // 16 Darwin 600
-	AVI(  3, 25, 225, J, SND_09_JET,                     40,  82, 35, 240 ), // 17 Guru Galaxy
+	AVI(  4, 30, 210, J, SND_09_JET,                     40,  97, 25, 200 ), // 14 Darwin 400
+	AVI(  4, 24, 220, J, SND_09_JET,                     40,  105, 25, 240 ), // 15 Darwin 500
+	AVI(  4, 50, 230, J, SND_09_JET,                     40,  115, 40, 260 ), // 16 Darwin 600
+	AVI(  3, 25, 230, J, SND_09_JET,                     40,  82, 35, 240 ), // 17 Guru Galaxy
 	AVI(  4, 20, 235, J, SND_09_JET,                     40,  88, 30, 260 ), // 18 Airtaxi A21
-	AVI(  4, 19, 220, J, SND_09_JET,                     40,  92, 25, 210 ), // 19 Airtaxi A31
-	AVI(  4, 18, 170, J, SND_09_JET,                     40,  100, 20, 160 ), // 20 Airtaxi A32
-	AVI(  4, 35, 210, J, SND_09_JET,                     40,  120, 20, 220 ), // 21 Airtaxi A33
-	AVI(  6, 16, 125, P, SND_09_JET,                     50,  85, 10,  80 ), // 22 Yate Aerospace YAe46
-	AVI(  2, 17, 145, P, SND_09_JET,                     40,  94, 10,  85 ), // 23 Dinger 100
+	AVI(  4, 21, 220, J, SND_09_JET,                     40,  92, 25, 210 ), // 19 Airtaxi A31
+	AVI(  4, 25, 170, J, SND_09_JET,                     40,  100, 20, 160 ), // 20 Airtaxi A32
+	AVI(  4, 55, 240, J, SND_09_JET,                     40,  120, 20, 220 ), // 21 Airtaxi A33
+	AVI(  6, 18, 125, P, SND_09_JET,                     50,  85, 10,  80 ), // 22 Yate Aerospace YAe46
+	AVI(  2, 20, 155, P, SND_09_JET,                     40,  94, 10,  115 ), // 23 Dinger 100
 	AVI( 11, 16, 130, P, SND_09_JET,                     40,  74, 10,  75 ), // 24 AirTaxi A34-1000
 	AVI( 10, 16, 149, P, SND_09_JET,                     40,  74, 10,  85 ), // 25 Yate Z-Shuttle
 	AVI( 15, 17, 170, P, SND_09_JET,                     40,  74, 18,  65 ), // 26 Kelling K1

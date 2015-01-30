@@ -80,7 +80,7 @@ std::string GenerateVehicleName(Vehicle *current_vehicle, const std::string name
             continue;
         }
 
-        if (search_name_len == name_len){
+        if (search_name_len == name_len && !is_first_vehicle_found){
             is_first_vehicle_found = true;
             queue_numbers[array_size++] = 0;
             continue;
@@ -114,6 +114,9 @@ std::string GenerateVehicleName(Vehicle *current_vehicle, const std::string name
             break;
         }
     }
+    char buf[8];
+    sprintf(buf, " %u", first_number);
+    new_vehicle_name += buf;
 
     return new_vehicle_name;
 }
@@ -151,11 +154,9 @@ void BuildVehicleName(Vehicle *vehicle)
         }
 
         destination_names.push_back(order_town_name);
-        new_vehicle_name << (new_vehicle_name.rdbuf()->in_avail() == 0?"":"-") << order_town_name;
+        new_vehicle_name << (new_vehicle_name.rdbuf()->in_avail() == 0 ? "" : "-") << order_town_name;
     }
 
-    if (new_vehicle_name.rdbuf()->in_avail() == 0)
-        new_vehicle_name << "Change me";
 
     std::string generated_name = GenerateVehicleName(vehicle, new_vehicle_name.str());
     vehicle->name = strdup(generated_name.c_str());

@@ -4925,7 +4925,7 @@ STR_WHITE_STRING                                                :{WHITE}{STRING}
 STR_ORANGE_STRING1_WHITE                                        :{ORANGE}{STRING1}{WHITE}
 STR_ORANGE_STRING1_LTBLUE                                       :{ORANGE}{STRING1}{LTBLUE}
 STR_TINY_BLACK_HEIGHT                                           :{TINY_FONT}{BLACK}{HEIGHT}
-STR_TINY_BLACK_VEHICLE                                          :{TINY_FONT}{BLACK}{RAW_STRING}{GREEN}{RAW_STRING}{RED}{RAW_STRING}{GOLD}{RAW_STRING}{ORANGE}{RAW_STRING} {BLACK}{VEHICLE}
+STR_TINY_BLACK_VEHICLE                                          :{TINY_FONT}{YELLOW}{RAW_STRING}{GREEN}{RAW_STRING}{RED}{RAW_STRING}{GOLD}{RAW_STRING}{ORANGE}{RAW_STRING} {BLACK}{VEHICLE}
 STR_TINY_RIGHT_ARROW                                            :{TINY_FONT}{RIGHT_ARROW}
 
 STR_BLACK_1                                                     :{BLACK}1

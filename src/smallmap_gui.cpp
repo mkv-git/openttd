@@ -1623,8 +1623,8 @@ Point SmallMapWindow::GetStationMiddle(const Station *st) const
 	return ret;
 }
 
-SmallMapWindow::SmallMapType SmallMapWindow::map_type = SMT_CONTOUR;
-bool SmallMapWindow::show_towns = true;
+SmallMapWindow::SmallMapType SmallMapWindow::map_type = SMT_OWNER;
+bool SmallMapWindow::show_towns = false;
 
 /**
  * Custom container class for displaying smallmap with a vertically resizing legend panel.
@@ -1788,7 +1788,7 @@ static const NWidgetPart _nested_smallmap_widgets[] = {
 };
 
 static WindowDesc _smallmap_desc(
-	WDP_AUTO, "smallmap", 484, 314,
+	WDP_MANUAL, "smallmap", 0, 0,
 	WC_SMALLMAP, WC_NONE,
 	0,
 	_nested_smallmap_widgets, lengthof(_nested_smallmap_widgets)
