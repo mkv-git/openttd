@@ -10,6 +10,7 @@
 /** @file industry_cmd.cpp Handling of industry tiles. */
 
 #include "stdafx.h"
+#include "math.h"
 #include "clear_map.h"
 #include "industry.h"
 #include "station_base.h"
@@ -1329,7 +1330,7 @@ static CommandCost FindTownForIndustry(TileIndex tile, int type, Town **t)
     //const char *town_name = FetchTownName(*t);
     bool allow_new_bank = false;
 
-    if (((_settings_game.economy.multiple_industry_per_town) || (type == IT_BANK_TEMP)) && (town_population > 1200)) {
+    if (((_settings_game.economy.multiple_industry_per_town) || (type == IT_BANK_TEMP)) && (town_population > 10000)) {
         FOR_ALL_INDUSTRIES(i) {
             try {
                 if (i->town != *t)
@@ -1337,7 +1338,7 @@ static CommandCost FindTownForIndustry(TileIndex tile, int type, Town **t)
                 else if ((i->town == *t) and (i->type == IT_BANK_TEMP))
                     bank_count++;
 
-                allow_new_bank = bank_count <= (town_population / 10000) && (bank_count < 3);
+                allow_new_bank = bank_count < floor(town_population / 10000) && (bank_count < 3);
                 if (!allow_new_bank) {
                     *t = NULL;
                     return_cmd_error(STR_ERROR_ONLY_ONE_ALLOWED_PER_TOWN);
@@ -1470,7 +1471,7 @@ static CommandCost CheckIfIndustryTilesAreFree(TileIndex tile, const IndustryTil
  */
 static CommandCost CheckIfIndustryIsAllowed(TileIndex tile, int type, const Town *t)
 {
-	if ((GetIndustrySpec(type)->behaviour & INDUSTRYBEH_TOWN1200_MORE) && t->cache.population < 1200) {
+	if ((GetIndustrySpec(type)->behaviour & INDUSTRYBEH_TOWN1200_MORE) && t->cache.population < 5000) {
 		return_cmd_error(STR_ERROR_CAN_ONLY_BE_BUILT_IN_TOWNS_WITH_POPULATION_OF_1200);
 	}
 

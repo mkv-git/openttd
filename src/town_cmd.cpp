@@ -3130,8 +3130,8 @@ static void UpdateTownGrowRate(Town *t)
 
 	t->growth_rate = m / (t->cache.num_houses / 50 + 1);
     int cur_growth = t->growth_rate;
-    if (t->cache.population > 50000) {
-        t->growth_rate = std::max(cur_growth, 51);
+    if (t->cache.population > 30000) {
+        t->growth_rate = std::max(cur_growth, 31);
     } else if (t->cache.population > 10000) {
         int new_growth_rate = t->cache.population / 1000 + 1;
         t->growth_rate = std::max(cur_growth, new_growth_rate);

@@ -67,6 +67,9 @@ std::string GenerateVehicleName(Vehicle *current_vehicle, const std::string name
             continue;
         }
 
+        if (vehicle == current_vehicle)
+            continue;
+
         const int search_name_len = strlen(vehicle->name);
         name_len_diff = search_name_len - name_len;
 

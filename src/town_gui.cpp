@@ -806,6 +806,7 @@ public:
 
 					SetDParam(0, t->index);
 					SetDParam(1, t->cache.population);
+                    SetDParam(2, t->ratings[_current_company]);
 					DrawString(text_left, text_right, y + (this->resize.step_height - FONT_HEIGHT_NORMAL) / 2, STR_TOWN_DIRECTORY_TOWN);
 
 					y += this->resize.step_height;
